@@ -1,0 +1,185 @@
+(sid port)
+(sid netif)
+(sid netmsg)
+(sid node)
+
+(typeattribute net_if_obj_type)
+(typeattribute net_node_obj_type)
+(typeattribute net_packet_obj_type)
+(typeattribute net_peer_obj_type)
+(typeattribute net_port_obj_type)
+
+(typeattribute net_ephemeral_port_obj_type)
+(typeattribute net_reserved_port_obj_type)
+(typeattribute net_rpc_port_obj_type)
+(typeattribute net_unreserved_port_obj_type)
+
+(typeattribute net_unconfined_subj_type)
+
+(block net_if_obj_blk
+	(blockabstract net_if_obj_blk)
+
+	(type if)
+	(call net_if_obj_type (if)))
+
+(block net_node_obj_blk
+	(blockabstract net_node_obj_blk)
+
+	(type node)
+	(call net_node_obj_type (node)))
+
+(block net_packet_obj_blk
+	(blockabstract net_packet_obj_blk)
+
+	(type packet)
+	(call net_packet_obj_type (packet)))
+
+(block net_peer_obj_blk
+	(blockabstract net_peer_obj_blk)
+
+	(type peer)
+	(call net_peer_obj_type (peer)))
+
+(block net_port_obj_blk
+	(blockabstract net_port_obj_blk)
+
+	(type port)
+	(call net_port_obj_type (port)))
+
+(block net_ephemeral_port_obj_blk
+	(blockabstract net_ephemeral_port_obj_blk)
+
+	(type port)
+	(call net_ephemeral_port_obj_type (port)))
+
+(block net_hi_reserved_port_obj_blk
+	(blockabstract net_hi_reserved_port_obj_blk)
+
+	(type port)
+	(call net_hi_reserved_port_obj_type (port)))
+
+(block net_reserved_port_obj_blk
+	(blockabstract net_reserved_port_obj_blk)
+
+	(type port)
+	(call net_reserved_port_obj_type (port)))
+
+(block net_unreserved_port_obj_blk
+	(blockabstract net_unreserved_port_obj_blk)
+
+	(type port)
+	(call net_unreserved_port_obj_type (port)))
+
+(block port
+	(blockinherit net_port_obj_blk)
+
+	(context port (sys.id sys.role port (systemlow systemlow)))
+	(sidcontext port port))
+
+(block ephemeral
+	(blockinherit net_ephemeral_port_obj_blk)
+
+	(context ephemeral (sys.id sys.role port (systemlow systemlow)))
+	(portcon "tcp" (32768 61000) ephemeral)
+	(portcon "udp" (32768 61000) ephemeral))
+
+(block hi_reserved
+	(blockinherit net_hi_reserved_port_obj_blk)
+
+	(context hi_reserved (sys.id sys.role port (systemlow systemlow)))
+	(portcon "tcp" (512 1023) hi_reserved)
+	(portcon "udp" (512 1023) hi_reserved))
+
+(block reserved
+	(blockinherit net_reserved_port_obj_blk)
+
+	(context reserved (sys.id sys.role port (systemlow systemlow)))
+	(portcon "tcp" (1 511) reserved)
+	(portcon "udp" (1 511) reserved))
+
+(block unreserved
+	(blockinherit net_unreserved_port_obj_blk)
+
+	(context unreserved (sys.id sys.role port (systemlow systemlow)))
+	(portcon "tcp" (1024 32767) unreserved)
+	(portcon "udp" (1024 32767) unreserved)
+	(portcon "tcp" (61001 65535) unreserved)
+	(portcon "udp" (61001 65535) unreserved))
+
+(block node
+	(blockinherit net_node_obj_blk)
+
+	(context node (sys.id sys.role node (systemlow systemhigh)))
+	(sidcontext node node))
+
+(block if
+	(blockinherit net_if_obj_blk)
+
+	(context if (sys.id sys.role if (systemlow systemhigh)))
+	(sidcontext netif if))
+
+(block packet
+	(blockinherit net_packet_obj_blk))
+
+(block peer
+	(blockinherit net_peer_obj_blk)
+
+	(context peer (sys.id sys.role peer (systemhigh systemhigh)))
+	(sidcontext netmsg peer))
+
+(call sys_obj_type (net_if_obj_type))
+(call sys_obj_type (net_node_obj_type))
+(call sys_obj_type (net_packet_obj_type))
+(call sys_obj_type (net_peer_obj_type))
+(call sys_obj_type (net_port_obj_type))
+
+(allow net_unconfined_subj_type net_node_obj_type (node (all)))
+(allow net_unconfined_subj_type net_if_obj_type (netif (all)))
+(allow net_unconfined_subj_type net_packet_obj_type (packet (all)))
+
+(allow net_unconfined_subj_type net_port_obj_type (tcp_socket (name_bind name_connect)))
+(allow net_unconfined_subj_type net_port_obj_type (udp_socket (name_bind)))
+(allow net_unconfined_subj_type net_port_obj_type (rawip_socket (name_bind)))
+(allow net_unconfined_subj_type net_port_obj_type (dccp_socket (name_bind name_connect)))
+
+(allow net_unconfined_subj_type net_node_obj_type (tcp_socket (node_bind)))
+(allow net_unconfined_subj_type net_node_obj_type (udp_socket (node_bind)))
+(allow net_unconfined_subj_type net_node_obj_type (rawip_socket (node_bind)))
+(allow net_unconfined_subj_type net_node_obj_type (dccp_socket (node_bind)))
+
+(call sys_recv_unlabeled_peers (net_unconfined_subj_type))
+
+(macro net_if_obj_type ((type ARG1))
+	(typeattributeset net_if_obj_type ARG1))
+
+(macro net_node_obj_type ((type ARG1))
+	(typeattributeset net_node_obj_type ARG1))
+
+(macro net_packet_obj_type ((type ARG1))
+	(typeattributeset net_packet_obj_type ARG1))
+
+(macro net_peer_obj_type ((type ARG1))
+	(typeattributeset net_peer_obj_type ARG1))
+
+(macro net_port_obj_type ((type ARG1))
+	(typeattributeset net_port_obj_type ARG1))
+
+(macro net_ephemeral_port_obj_type ((type ARG1))
+	(call net_port_obj_type (ARG1))
+	(typeattributeset net_ephemeral_port_obj_type ARG1))
+
+(macro net_hi_reserved_port_obj_type ((type ARG1))
+	(call net_port_obj_type (ARG1))
+	(typeattributeset net_reserved_port_obj_type ARG1)
+	(typeattributeset net_rpc_port_obj_type ARG1))
+
+(macro net_reserved_port_obj_type ((type ARG1))
+	(call net_port_obj_type (ARG1))
+	(typeattributeset net_reserved_port_obj_type ARG1))
+
+(macro net_unreserved_port_obj_type ((type ARG1))
+	(call net_port_obj_type (ARG1))
+	(typeattributeset net_unreserved_port_obj_type ARG1))
+
+(macro net_unconfined_subj_type ((type ARG1))
+	(typeattributeset net_unconfined_subj_type ARG1))

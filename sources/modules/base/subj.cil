@@ -1,0 +1,216 @@
+(boolean subj_execheap false)
+(boolean subj_execmem false)
+(boolean subj_execstack false)
+(boolean subj_mmap_low false)
+
+(typeattribute subj_entry_obj_type)
+
+(typeattribute subj_type)
+(typeattribute subj_common_type)
+
+(typeattribute subj_unconfined_type)
+
+(typeattribute subj_can_change_obj_id_type)
+(typeattribute subj_uncond_exempt_type)
+
+(block subj_blk
+	(blockabstract subj_blk)
+
+	(type subj)
+	(call subj_type (subj)))
+
+(block subj_common_blk
+	(blockabstract subj_common_blk)
+
+	(type subj)
+	(call subj_common_type (subj)))
+
+(block subj_execheap
+	(blockinherit sec_bool_obj_blk)
+
+	(context subj_execheap (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/subj_execheap" subj_execheap))
+
+(block subj_execmem
+	(blockinherit sec_bool_obj_blk)
+
+	(context subj_execmem (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/subj_execmem" subj_execmem))
+
+(block subj_execstack
+	(blockinherit sec_bool_obj_blk)
+
+	(context subj_execstack (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/subj_execstack" subj_execstack))
+
+(block subj_mmap_low
+	(blockinherit sec_bool_obj_blk)
+
+	(context subj_mmap_low (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/subj_mmap_low" subj_mmap_low))
+
+(call sys_subj_type (subj_common_type))
+
+(call cmd_exec_obj_type (subj_entry_obj_type))
+
+(typeattribute subj_not_subj_entry_obj_type)
+
+(typeattributeset subj_not_subj_entry_obj_type (not (subj_entry_obj_type)))
+
+(neverallow subj_type subj_not_subj_entry_obj_type (file (entrypoint)))
+
+(typeattribute subj_not_subj_type)
+
+(typeattributeset subj_not_subj_type (not subj_type))
+
+(neverallow subj_type subj_not_subj_type (process (transition dyntransition)))
+
+(typeattribute subj_can_set_current_context_type)
+(typeattribute subj_can_not_set_current_context_type)
+
+(typeattributeset subj_can_not_set_current_context_type (and (subj_type) (not (subj_can_set_current_context_type))))
+
+(neverallow subj_can_not_set_current_context_type self (process (setcurrent)))
+
+(typeattribute subj_can_execheap_type)
+(typeattribute subj_can_not_execheap_type)
+
+(typeattributeset subj_can_not_execheap_type (and (subj_type) (not (subj_can_execheap_type))))
+(neverallow subj_can_not_execheap_type self (process (execheap)))
+
+(typeattribute subj_can_execmem_type)
+(typeattribute subj_can_not_execmem_type)
+
+(typeattributeset subj_can_not_execmem_type (and (subj_type) (not (subj_can_execmem_type))))
+
+(neverallow subj_can_not_execmem_type self (process (execmem)))
+
+(typeattribute subj_can_execstack_type)
+(typeattribute subj_can_not_execstack_type)
+
+(typeattributeset subj_can_not_execstack_type (and (subj_type) (not (subj_can_execstack_type))))
+
+(neverallow subj_can_not_execstack_type self (process (execstack)))
+
+(typeattribute subj_can_mmap_low_type)
+(typeattribute subj_can_not_mmap_low_type)
+
+(typeattributeset subj_can_not_mmap_low_type (and (subj_type) (not (subj_can_mmap_low_type))))
+
+(neverallow subj_can_not_mmap_low_type self (memprotect (mmap_zero)))
+
+(allow subj_unconfined_type subj_type
+	all_process_perms_except_transition_ptrace_setsched_dyntransition_setcurrent_execmem_execstack_and_execheap)
+(allow subj_unconfined_type subj_type rw_file_perms)
+(allow subj_unconfined_type subj_type list_dir_perms)
+(allow subj_unconfined_type subj_type read_lnk_file_perms)
+(allow subj_unconfined_type subj_type (fd (all)))
+(allow subj_unconfined_type subj_type (socket (all)))
+(allow subj_unconfined_type subj_type create_tcp_stream_socket_perms)
+(allow subj_unconfined_type subj_type create_udp_socket_perms)
+(allow subj_unconfined_type subj_type create_rawip_socket_perms)
+(allow subj_unconfined_type subj_type (netlink_socket (all)))
+(allow subj_unconfined_type subj_type (packet_socket (all)))
+(allow subj_unconfined_type subj_type (unix_stream_socket (all)))
+(allow subj_unconfined_type subj_type (unix_dgram_socket (all)))
+(allow subj_unconfined_type subj_type (sem (all)))
+(allow subj_unconfined_type subj_type (msg (all)))
+(allow subj_unconfined_type subj_type (msgq (all)))
+(allow subj_unconfined_type subj_type (shm (all)))
+(allow subj_unconfined_type subj_type (ipc (all)))
+(allow subj_unconfined_type subj_type (netlink_route_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_firewall_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_tcpdiag_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_nflog_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_xfrm_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_selinux_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_audit_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_ip6fw_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_dnrt_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_kobject_uevent_socket (all)))
+(allow subj_unconfined_type subj_type (appletalk_socket (all)))
+(allow subj_unconfined_type subj_type (key (all)))
+(allow subj_unconfined_type subj_type create_dccp_stream_socket_perms)
+(allow subj_unconfined_type subj_type (tun_socket (all)))
+(allow subj_unconfined_type subj_type (binder (all)))
+(allow subj_unconfined_type subj_type (netlink_iscsi_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_fib_lookup_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_connector_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_netfilter_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_generic_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_scsitransport_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_rdma_socket (all)))
+(allow subj_unconfined_type subj_type (netlink_crypto_socket (all)))
+
+(call subj_dynamic_subj_type_transition_type (subj_unconfined_type))
+
+(call subj_execheap_type (subj_unconfined_type))
+(call subj_execmem_type (subj_unconfined_type))
+(call subj_execstack_type (subj_unconfined_type))
+(call subj_mmap_low_type (subj_unconfined_type))
+
+(call subj_obj_id_change_exemption_type (subj_unconfined_type))
+(call subj_uncond_exemption_type (subj_unconfined_type))
+
+(allow subj_unconfined_type subj_entry_obj_type (file (entrypoint)))
+
+(macro subj_type ((type ARG1))
+	(typeattributeset subj_type ARG1))
+
+(macro subj_common_type ((type ARG1))
+	(call subj_type (ARG1))
+	(typeattributeset subj_common_type ARG1))
+
+(macro subj_entry ((type ARG1)(type ARG2))
+	(allow ARG1 ARG2 (file (entrypoint)))
+	(allow ARG1 ARG2 mmap_file_perms)
+	(call subj_entry_obj_type (ARG2)))
+
+(macro subj_entry_obj_type ((type ARG1))
+	(typeattributeset subj_entry_obj_type ARG1))
+
+(macro subj_dynamic_subj_type_transition_type ((type ARG1))
+	(typeattributeset subj_can_set_current_context_type ARG1))
+
+(macro subj_execheap_type ((type ARG1))
+	(typeattributeset subj_can_execheap_type ARG1)
+	(booleanif subj_execheap (true (allow ARG1 self (process (execheap))))))
+
+(macro subj_execheap_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execheap)))
+	(typeattributeset subj_can_execheap_type ARG1))
+
+(macro subj_execmem_type ((type ARG1))
+	(typeattributeset subj_can_execmem_type ARG1)
+	(booleanif subj_execmem (true (allow ARG1 self (process (execmem))))))
+
+(macro subj_execmem_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execmem)))
+	(typeattributeset subj_can_execmem_type ARG1))
+
+(macro subj_execstack_type ((type ARG1))
+	(typeattributeset subj_can_execmem_type ARG1)
+	(typeattributeset subj_can_execstack_type ARG1)
+	(booleanif subj_execstack (true (allow ARG1 self (process (execmem execstack))))))
+
+(macro subj_execstack_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execmem execstack)))
+	(typeattributeset subj_can_execmem_type ARG1)
+	(typeattributeset subj_can_execstack_type ARG1))
+
+(macro subj_mmap_low_type ((type ARG1))
+	(typeattributeset subj_can_mmap_low_type ARG1)
+	(booleanif subj_mmap_low (true (allow ARG1 self (memprotect (mmap_zero))))))
+
+(macro subj_mmap_low_uncond_type ((type ARG1))
+	(allow ARG1 self (memprotect (mmap_zero)))
+	(typeattributeset subj_can_mmap_low_type ARG1))
+
+(macro subj_obj_id_change_exemption_type ((type ARG1))
+	(typeattributeset subj_can_change_obj_id_type ARG1))
+
+(macro subj_uncond_exemption_type ((type ARG1))
+	(typeattributeset subj_uncond_exempt_type ARG1))
+
+(macro subj_unconfined_type ((type ARG1))
+	(typeattributeset subj_unconfined_type ARG1))

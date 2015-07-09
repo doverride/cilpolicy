@@ -1,0 +1,278 @@
+(sid fs)
+
+(typeattribute fs_obj_type)
+
+(typeattribute fs_unconfined_subj_type)
+
+(block fs_obj_blk
+	(blockabstract fs_obj_blk)
+	
+	(type fs)
+	(call fs_obj_type (fs))
+)
+
+(block aio
+	(blockinherit fs_obj_blk)
+
+	(context aio (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "aio" "/" aio))
+
+(block anon_inodefs
+	(blockinherit fs_obj_blk)
+
+	(context anon_inodefs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "anon_inodefs" "/" anon_inodefs))
+
+(block autofs_fs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context autofs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "autofs" "/" autofs))
+
+(block bdev
+	(blockinherit fs_obj_blk)
+
+	(context bdev (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "bdev" "/" bdev))
+
+(block binfmt_misc
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context binfmt_misc (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "binfmt_misc" "/" binfmt_misc))
+
+(block cgroup
+	(blockinherit fs_obj_blk)
+
+	(context cgroup (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "cgroup" "/" cgroup))
+
+(block configfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context configfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "configfs" "/" configfs))
+
+(block debugfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context debugfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "debugfs" "/" debugfs))
+
+(block devpts
+	(blockinherit fs_obj_blk)
+
+	(context devpts (sys.id sys.role fs (systemlow systemlow)))
+	(fsuse trans "devpts" devpts))
+
+(block devtmpfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(call fs_associate_fs (fs))
+
+	(context devtmpfs (sys.id sys.role fs (systemlow systemlow)))
+	(fsuse trans "devtmpfs" devtmpfs)
+
+	(filecon "/dev" dir devtmpfs)
+	(filecon "/dev(/.*)?" any ()))
+
+(block dosfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context dosfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "vfat" "/" dosfs))
+
+(block drm
+	(blockinherit fs_obj_blk)
+
+	(context drm (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "drm" "/" drm))
+
+(block efivarfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context efivarfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "efivarfs" "/" efivarfs))
+
+(block fs
+	(blockinherit fs_obj_blk)
+
+	(context fs (sys.id sys.role fs (systemlow systemlow)))
+	(sidcontext fs fs)
+
+	(fsuse task "nsfs" fs)
+	(fsuse task "pipefs" fs)
+	(fsuse task "sockfs" fs)
+
+	(fsuse xattr "ext4" fs)
+	(fsuse xattr "xfs" fs))
+
+(block fuse_fs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context fuse (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "fuse" "/" fuse)
+	(genfscon "fuseblk" "/" fuse)
+	(genfscon "fusectl" "/" fuse))
+
+(block hugetlbfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context hugetlbfs (sys.id sys.role fs (systemlow systemlow)))
+	(fsuse trans "hugetlbfs" hugetlbfs))
+
+(block nfsd
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context nfsd (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "nfsd" "/" nfsd)
+
+(block proc
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(call fs_associate_fs (fs))
+
+	(context proc (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "proc" "/" proc)
+	(genfscon "proc" "/sysvipc" proc) ; BUG
+
+	(filecon "/proc" dir proc)
+	(filecon "/proc(/.*)?" any ()))
+
+(block pstore
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context pstore (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "pstore" "/" pstore))
+
+(block removable)
+	(blockinherit fs_obj_blk))
+
+(block rootfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(call fs_associate_fs (fs))
+
+	(context rootfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "rootfs" "/" rootfs)
+
+	(filecon "/" dir rootfs))
+
+(block rpc_pipefs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context rpc_pipefs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "rpc_pipefs" "/" rpc_pipefs))
+
+(block sysfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(call fs_associate_fs (fs))
+
+	(context sysfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "sysfs" "/" sysfs)
+
+	(filecon "/sys" dir sysfs)
+	(filecon "/sys(/.*)?" any ()))
+
+(block tmpfs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(call fs_associate_fs (fs))
+
+	(context tmpfs (sys.id sys.role fs (systemlow systemlow)))
+	(fsuse trans "mqueue" tmpfs)
+	(fsuse trans "tmpfs" tmpfs)
+
+	(filecon "/tmp" dir tmpfs)
+	(filecon "/tmp(/.*)?" any ())
+
+	(filecon "/var/run/user(/.*)?" any ())
+	(filecon "/var/run/initramfs/\.need_shutdown" file ()))
+
+(block tracefs
+	(blockinherit fs_obj_blk)
+
+	(call sys_mountpoint_obj_type (fs))
+
+	(context tracefs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "tracefs" "/" tracefs))
+
+(call sys_obj_type (fs_obj_type))
+
+(allow fs_obj_type self (filesystem (associate)))
+
+(allow fs_unconfined_subj_type fs_obj_type all_file_perms_except_mounton_execmod_and_entrypoint)
+(allow fs_unconfined_subj_type fs_obj_type all_dir_perms_except_mounton_and_execmod)
+(allow fs_unconfined_subj_type fs_obj_type all_fifo_file_perms_except_mounton_and_execmod)
+(allow fs_unconfined_subj_type fs_obj_type all_lnk_file_perms_except_mounton_and_execmod)
+(allow fs_unconfined_subj_type fs_obj_type all_sock_file_perms_except_mounton_and_execmod)
+(allow fs_unconfined_subj_type fs_obj_type all_blk_file_perms_except_mounton_and_execmod)
+(allow fs_unconfined_subj_type fs_obj_type all_chr_file_perms_except_mounton_and_execmod)
+
+(allow fs_unconfined_subj_type fs_obj_type (filesystem (all)))
+
+(macro fs_obj_type ((type ARG1))
+	(typeattributeset fs_obj_type ARG1))
+
+(macro fs_associate_fs ((type ARG1))
+	(allow ARG1 fs.fs (filesystem (associate))))
+
+(macro fs_associate_devtmpfs ((type ARG1))
+	(allow ARG1 devtmpfs.fs (filesystem (associate))))
+
+(macro fs_associate_devpts ((type ARG1))
+	(allow ARG1 devpts.fs (filesystem (associate))))
+
+(macro fs_associate_tmpfs ((type ARG1))
+	(allow ARG1 tmpfs.fs (filesystem (associate))))
+
+(macro fs_search_devtmpfs ((type ARG1))
+	(allow ARG1 devtmpfs.fs search_dir_perms))
+
+(macro fs_rw_devtmpfs_dirs ((type ARG1))
+	(allow ARG1 devtmpfs.fs rw_dir_perms))
+
+(macro fs_search_proc ((type ARG1))
+	(allow ARG1 proc.fs search_dir_perms))
+
+(macro fs_rw_proc_dirs ((type ARG1))
+	(allow ARG1 proc.fs rw_dir_perms))
+
+(macro fs_rootfs_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call obj_type_transition_pattern (ARG1 rootfs.fs ARG2 ARG3 ARG4)))
+
+(macro fs_unconfined_subj_type ((type ARG1))
+	(typeattributeset fs_unconfined_subj_type ARG1))

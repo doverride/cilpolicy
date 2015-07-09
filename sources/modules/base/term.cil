@@ -1,0 +1,66 @@
+(typeattribute term_pty_obj_type)
+(typeattribute term_serial_obj_type)
+(typeattribute term_server_pty_obj_type)
+(typeattribute term_tty_obj_type)
+
+(block term_pty_obj_blk
+	(blockabstract term_pty_obj_blk)
+
+	(type pty_dev)
+	(call term_pty_obj_type (pty_dev)))
+
+(block term_login_pty_obj_blk
+	(blockabstract term_login_pty_obj_blk)
+
+	(type login_pty_dev)
+	(call term_login_pty_obj_type (login_pty_dev)))
+
+(block term_serial_obj_blk
+	(blockabstract term_serial_obj_blk)
+
+	(type serial_dev)
+	(call term_serial_obj_type (serial_dev)))
+
+(block term_tty_obj_blk
+	(blockabstract term_tty_obj_blk)
+
+	(type tty_dev)
+	(call term_tty_obj_type (tty_dev)))
+
+(block console
+	(blockinherit dev_obj_blk)
+
+	(context console (sys.id sys.role dev (systemlow systemlow)))
+	(filecon "/dev/console" char console))
+
+(block tty
+	(blockinherit term_serial_obj_blk)
+
+	(context tty (sys.id sys.role serial_dev (systemlow systemlow)))
+	(filecon "/dev/hvc[0-9]+" char tty)
+	(filecon "/dev/tty.+" char tty)
+	(filecon "/dev/vcs[^/]*" char tty))
+
+(block virtio
+	(blockinherit term_serial_obj_blk)
+
+	(context virtio (sys.id sys.role serial_dev (systemlow systemlow)))
+	(filecon "/dev/vport[0-9]p[0-9]+" char virtio))
+
+(call fs_associate_devpts (term_pty_obj_type))
+
+(macro term_pty_obj_type ((type ARG1))
+	(call dev_obj_type (ARG1))
+	(typeattributeset term_pty_obj_type ARG1))
+
+(macro term_login_pty_obj_type ((type ARG1))
+	(call term_pty_obj_type (ARG1))
+	(typeattributeset term_server_pty_obj_type ARG1))
+
+(macro term_serial_obj_type ((type ARG1))
+	(call dev_obj_type (ARG1))
+	(typeattributeset term_serial_obj_type ARG1))
+
+(macro term_tty_obj_type ((type ARG1))
+	(call term_serial_obj_type (ARG1))
+	(typeattributeset term_tty_obj_type ARG1))

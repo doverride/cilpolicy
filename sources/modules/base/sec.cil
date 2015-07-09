@@ -1,0 +1,74 @@
+(boolean sec_load_policy true)
+
+(sid security)
+
+(typeattribute sec_bool_obj_type)
+
+(typeattribute sec_unconfined_subj_type)
+
+(block sec_bool_obj_blk
+	(blockabstract sec_bool_obj_blk)
+
+	(type bool)
+	(call sec_bool_obj_type (bool)))
+
+(block securityfs
+	(blockinherit fs_obj_blk)
+
+	(call sec_bool_obj_type (fs))
+
+	(context securityfs (sys.id sys.role fs (systemlow systemlow)))
+	(genfscon "selinuxfs" "/" securityfs)
+	(genfscon "securityfs" "/" securityfs)
+
+	(sidcontext security (sys.id sys.role fs (systemhigh systemhigh))))
+
+(block sec_load_policy
+	(blockinherit sec_bool_obj_blk)
+
+	(context sec_load_policy (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/sec_load_policy" sec_load_policy))
+
+(call sys_obj_type (sec_bool_obj_type))
+
+(typeattribute sec_can_load_policy)
+(typeattribute sec_can_not_load_policy_or_sec_unconfined_subj_type)
+
+(typeattributeset sec_can_not_load_policy_or_sec_unconfined_subj_type (not (sec_can_load_policy sec_unconfined_subj_type)))
+
+(neverallow sec_can_not_load_policy_or_sec_unconfined_subj_type securityfs.fs (security (load_policy)))
+
+(typeattribute sec_can_setenforce)
+(typeattribute sec_can_not_setenforce_or_sec_unconfined_subj_type)
+
+(typeattributeset sec_can_not_setenforce_or_sec_unconfined_subj_type (not (sec_can_setenforce sec_unconfined_subj_type)))
+
+(neverallow sec_can_not_setenforce_or_sec_unconfined_subj_type securityfs.fs (security (setenforce)))
+
+(typeattribute sec_can_setsecparam)
+(typeattribute sec_can_not_setsecparam_or_sec_unconfined_subj_type)
+
+(typeattributeset sec_can_not_setsecparam_or_sec_unconfined_subj_type (not (sec_can_setsecparam sec_unconfined_subj_type)))
+
+(neverallow sec_can_not_setsecparam_or_sec_unconfined_subj_type securityfs.fs (security (setsecparam)))
+
+(allow sec_unconfined_subj_type securityfs.fs list_dir_perms)
+(allow sec_unconfined_subj_type securityfs.fs read_lnk_file_perms)
+
+(typeattribute sec_bool_obj_type_except_sec_load_policy)
+
+(typeattributeset sec_bool_obj_type_except_sec_load_policy (and (sec_bool_obj_type) (not (sec_load_policy.bool))))
+
+(allow sec_unconfined_subj_type sec_bool_obj_type read_file_perms)
+(allow sec_unconfined_subj_type sec_bool_obj_type_except_sec_load_policy (file (append write)))
+
+(allow sec_unconfined_subj_type securityfs.fs all_security_perms_except_load_policy_and_setenforce)
+
+(booleanif sec_load_policy (true (allow sec_unconfined_subj_type securityfs.fs (security (load_policy setenforce)))
+	(allow sec_unconfined_subj_type securityfs.fs (file (append write)))))
+
+(macro sec_bool_obj_type ((type ARG1))
+	(typeattributeset sec_bool_obj_type ARG1))
+
+(macro sec_unconfined_subj_type ((type ARG1))
+	(typeattributeset sec_unconfined_subj_type ARG1))
