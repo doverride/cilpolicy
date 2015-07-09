@@ -145,7 +145,7 @@
 	(call sys_mountpoint_obj_type (fs))
 
 	(context nfsd (sys.id sys.role fs (systemlow systemlow)))
-	(genfscon "nfsd" "/" nfsd)
+	(genfscon "nfsd" "/" nfsd))
 
 (block proc
 	(blockinherit fs_obj_blk)
@@ -169,7 +169,7 @@
 	(context pstore (sys.id sys.role fs (systemlow systemlow)))
 	(genfscon "pstore" "/" pstore))
 
-(block removable_fs)
+(block removable_fs
 	(blockinherit fs_obj_blk))
 
 (block rootfs
