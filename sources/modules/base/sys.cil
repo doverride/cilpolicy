@@ -220,7 +220,7 @@
         (blockinherit sys_sysfs_obj_blk)
 
         (context cpu_sysfs (sys.id sys.role sysfs (systemlow systemlow)))
-        (genfscon "sysfs" "/devices/system/cpu(/.*)?" cpu_sysfs))
+        (genfscon "sysfs" "/devices/system/cpu" cpu_sysfs))
 
 (block sys_load_kernel_module
 	(blockinherit sec_bool_obj_blk)
