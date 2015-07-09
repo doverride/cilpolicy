@@ -6,7 +6,7 @@
 
 (block fs_obj_blk
 	(blockabstract fs_obj_blk)
-	
+
 	(type fs)
 	(call fs_obj_type (fs))
 )
