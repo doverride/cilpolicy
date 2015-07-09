@@ -86,4 +86,18 @@
 		(or (dom h1 h2) (neq t1 mcs_constrained_subj_type)))
 
 	(mlsconstrain (udp_socket (node_bind))
-		(or (dom h1 h2) (neq t1 mcs_constrained_subj_type)))))
+		(or (dom h1 h2) (neq t1 mcs_constrained_subj_type)))
+
+	(mlsconstrain (node (recvfrom sendto))
+		(or (dom h1 h2) (neq t1 mcs_constrained_subj_type)))
+
+	(mlsconstrain (netif (egress ingress))
+		(or (dom h1 h2) (neq t1 mcs_constrained_subj_type)))
+
+	(mlsconstrain (packet (recv))
+		(or (dom h1 h2)
+		(and (neq t1 mcs_constrained_subj_type) (neq t1 mcs_constrained_subj_type))))
+
+	(mlsconstrain (peer (recv))
+		(or (dom h1 h2)
+		(and (neq t1 mcs_constrained_subj_type) (neq t1 mcs_constrained_subj_type))))))
