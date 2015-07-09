@@ -439,6 +439,13 @@
 	(call file_obj_type (ARG1))
 	(typeattributeset file_tmpfs_obj_type ARG1))
 
+(macro file_search_var ((type ARG1))
+	(allow ARG1 var.var_file search_dir_perms))
+
+(macro file_var_log_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call file_search_var (ARG1))
+	(call obj_type_transition_pattern (ARG1 var_log.var_log_file ARG2 ARG3 ARG4)))
+
 (macro file_rootfs_obj_type_transition_unknown ((type ARG1))
 	(call fs_rootfs_obj_type_transition (ARG1 unknown.file file "*"))
 	(call fs_rootfs_obj_type_transition (ARG1 unknown.file dir "*"))

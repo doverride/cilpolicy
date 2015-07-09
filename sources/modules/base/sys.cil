@@ -44,7 +44,15 @@
 	(userlevel id systemlow)
 	(userrange id (systemlow systemhigh))
 
-	(roleallow role sys_roleallow_role))
+	(roleallow role sys_roleallow_role)
+
+	(blockinherit file_var_log_obj_blk)
+
+	(context sys_var_log_file (sys.id sys.role var_log_file (systemlow systemlow)))
+	(filecon "/var/log/boot\.log" file sys_var_log_file)
+
+	(allow subj var_log_file manage_file_perms)
+	(call file_var_log_obj_type_transition (subj var_log_file file "boot.log")))
 
 (block sys_proc_obj_blk
 	(blockabstract sys_proc_obj_blk)
@@ -310,6 +318,10 @@
 (call sys_obj_type (sys_sysctl_obj_type))
 (call sys_obj_type (sys_sysfs_obj_type))
 
+(allow sys_audit_client_subj_type self (capability (audit_write)))
+(allow sys_audit_client_subj_type self r_netlink_audit_socket_perms)
+(allow sys_audit_client_subj_type self (netlink_audit_socket (nlmsg_relay)))
+
 (booleanif (sys_load_kernel_module) (true (allow sys_can_load_kernel_module_subj_type self
 	(capability (sys_nice sys_module)))
 	(allow sys_can_load_kernel_module_subj_type sys.subj (process (setsched)))))
@@ -354,6 +366,20 @@
 	(call fs_search_proc (ARG1))
 	(allow ARG1 kmsg_proc.proc read_file_perms)
 	(typeattributeset sys_can_read_kernel_message_subj_type ARG1))
+
+(macro sys_audit_set_loginuid ((type ARG1))
+	(allow ARG1 self (capability (audit_control)))
+	(allow ARG1 self r_netlink_audit_socket_perms)
+	(allow ARG1 self (netlink_audit_socket (nlmsg_relay))))
+
+(macro sys_audit_set_tty_audit ((type ARG1))
+	(allow ARG1 self r_netlink_audit_socket_perms)
+	(allow ARG1 self (netlink_audit_socket (nlmsg_tty_audit))))
+
+(macro sys_audit_set_params ((type ARG1))
+	(allow ARG1 self (capability (audit_write audit_control)))
+	(allow ARG1 self create_netlink_audit_socket_perms)
+	(allow ARG1 self (netlink_audit_socket (nlmsg_relay))))
 
 (macro sys_search_sysctl ((type ARG1))
 	(call fs_search_proc (ARG1))
