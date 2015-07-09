@@ -107,7 +107,7 @@
 
 	(context memory (sys.id sys.role dev (systemhigh systemhigh)))
 	(filecon "/dev/mem" char memory)
-	(filecon "/dev/ndctl([0-9]+)?" char memory))
+	(filecon "/dev/ndctl([0-9]+)?" char memory)
 	(filecon "/dev/port" char memory))
 
 (block mouse
