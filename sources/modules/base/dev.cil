@@ -317,3 +317,6 @@
     (typeattributeset dev_can_write_memory ARG1)
     (optional dev_write_all_optional_storage
         (call storage_write_all (ARG1))))
+
+(macro dev_unconfined_subj_type ((type ARG1))
+	(typeattributeset dev_unconfined_subj_type ARG1))
