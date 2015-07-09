@@ -15,8 +15,10 @@
 
 (typeattribute sys_mountpoint_obj_type)
 (typeattribute sys_obj_type)
+
 (typeattribute sys_proc_obj_type)
 (typeattribute sys_sysctl_obj_type)
+(typeattribute sys_sysfs_obj_type)
 
 (typeattribute sys_subj_type)
 (typeattribute sys_audit_client_subj_type)
@@ -55,6 +57,12 @@
 
 	(type sysctl)
 	(call sys_sysctl_obj_type (sysctl)))
+
+(block sys_sysfs_obj_blk
+	(blockabstract sys_sysfs_obj_blk)
+
+	(type sysfs)
+	(call sys_sysfs_obj_type (sysfs)))
 
 (block sys_isid_blk
 	(blockabstract sys_isid_blk)
@@ -208,6 +216,12 @@
 	(context vm_overcommit (sys.id sys.role sysctl (systemlow systemlow)))
 	(genfscon "proc" "/sys/vm/overcommit_memory" vm_overcommit))
 
+(block cpu_sysfs
+        (blockinherit sys_sysfs_obj_blk)
+
+        (context cpu_sysfs (sys.id sys.role sysfs (systemlow systemlow)))
+        (genfscon "sysfs" "/devices/system/cpu(/.*)?" cpu_sysfs))
+
 (block sys_load_kernel_module
 	(blockinherit sec_bool_obj_blk)
 
@@ -286,10 +300,15 @@
 (allow sys_unconfined_subj_type sys_sysctl_obj_type list_dir_perms)
 (allow sys_unconfined_subj_type sys_sysctl_obj_type read_lnk_file_perms)
 
+(allow sys_unconfined_subj_type sys_sysfs_obj_type rw_file_perms)
+(allow sys_unconfined_subj_type sys_sysfs_obj_type list_dir_perms)
+(allow sys_unconfined_subj_type sys_sysfs_obj_type read_lnk_file_perms)
+
 (call sys_load_kernel_module_subj_type (sys_unconfined_subj_type))
 
 (call sys_obj_type (sys_proc_obj_type))
 (call sys_obj_type (sys_sysctl_obj_type))
+(call sys_obj_type (sys_sysfs_obj_type))
 
 (booleanif (sys_load_kernel_module) (true (allow sys_can_load_kernel_module_subj_type self
 	(capability (sys_nice sys_module)))
@@ -318,6 +337,9 @@
 
 (macro sys_sysctl_obj_type ((type ARG1))
 	(typeattributeset sys_sysctl_obj_type ARG1))
+
+(macro sys_sysfs_obj_type ((type ARG1))
+	(typeattributeset sys_sysfs_obj_type ARG1))
 
 (macro sys_dump_kernel_subj_type ((type ARG1))
 	(allow ARG1 self (capability (sys_rawio)))
