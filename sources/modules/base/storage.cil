@@ -15,13 +15,13 @@
 	(context fuse_storage (sys.id sys.role storage_dev (systemlow systemlow)))
 	(filecon "/dev/fuse" char fuse_storage))
 
-(block removable
+(block removable_storage
 	(blockinherit dev_storage_obj_blk)
 
-	(context removable (sys.id sys.role storage_dev (systemlow systemlow)))
-	(filecon "/dev/mmcblk.+" block removable)
-	(filecon "/dev/mspblk.+" block removable)
-	(filecon "/dev/sr[0-9]+" block removable))
+	(context removable_storage (sys.id sys.role storage_dev (systemlow systemlow)))
+	(filecon "/dev/mmcblk.+" block removable_storage)
+	(filecon "/dev/mspblk.+" block removable_storage)
+	(filecon "/dev/sr[0-9]+" block removable_storage))
 
 (block scsi_generic
 	(blockinherit dev_storage_obj_blk)
@@ -75,7 +75,7 @@
 
 (allow storage_unconfined_subj_type fuse_storage.storage_dev all_chr_file_perms_except_mounton_and_execmod)
 
-(allow storage_unconfined_subj_type removable.storage_dev all_blk_file_perms_except_mounton_and_execmod)
+(allow storage_unconfined_subj_type removable_storage.storage_dev all_blk_file_perms_except_mounton_and_execmod)
 
 (allow storage_unconfined_subj_type scsi_generic.storage_dev all_chr_file_perms_except_mounton_and_execmod)
 
@@ -95,7 +95,7 @@
 (macro storage_manage_removable ((type ARG1))
 	(allow ARG1 self (capability (mknod)))
 	(call fs_rw_devtmpfs_dirs (ARG1))
-	(allow ARG1 removable.storage_dev manage_blk_file_perms))
+	(allow ARG1 removable_storage.storage_dev manage_blk_file_perms))
 
 (macro storage_manage_scsi_generic ((type ARG1))
 	(allow ARG1 self (capability (mknod)))
@@ -140,11 +140,11 @@
 
 (macro storage_read_removable ((type ARG1))
 	(call fs_search_devtmpfs (ARG1))
-	(allow ARG1 removable.storage_dev read_blk_file_perms))
+	(allow ARG1 removable_storage.storage_dev read_blk_file_perms))
 
 (macro storage_write_removable ((type ARG1))
 	(call fs_search_devtmpfs (ARG1))
-	(allow ARG1 removable.storage_dev write_blk_file_perms))
+	(allow ARG1 removable_storage.storage_dev write_blk_file_perms))
 
 (macro storage_rw_removable ((type ARG1))
 	(call storage_read_removable (ARG1))

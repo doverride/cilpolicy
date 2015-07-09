@@ -169,7 +169,7 @@
 	(context pstore (sys.id sys.role fs (systemlow systemlow)))
 	(genfscon "pstore" "/" pstore))
 
-(block removable)
+(block removable_fs)
 	(blockinherit fs_obj_blk))
 
 (block rootfs
