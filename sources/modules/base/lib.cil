@@ -3,13 +3,13 @@
 (block lib_obj_blk
 	(blockabstract lib_obj_blk)
 
-	(type lib)
-	(call lib_obj_type (lib)))
+	(type lib_file)
+	(call lib_obj_type (lib_file)))
 
 (block lib
 	(blockinherit lib_obj_blk)
 
-	(context lib (sys.id sys.role lib (systemlow systemlow)))
+	(context lib (sys.id sys.role lib_file (systemlow systemlow)))
 	(filecon "/usr/lib(/.*)?" any lib)
 	(filecon "/usr/lib" symlink lib)
 

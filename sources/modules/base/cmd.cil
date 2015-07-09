@@ -3,13 +3,13 @@
 (block cmd_exec_obj_blk
 	(blockabstract cmd_exec_obj_blk)
 
-	(type cmd)
-	(call cmd_exec_obj_type (cmd)))
+	(type cmd_file)
+	(call cmd_exec_obj_type (cmd_file)))
 
 (block cmd
 	(blockinherit cmd_exec_obj_blk)
 
-	(context cmd (sys.id sys.role cmd (systemlow systemlow)))
+	(context cmd (sys.id sys.role cmd_file (systemlow systemlow)))
 	(filecon "/etc/dhcp/dhclient\.d/chrony\.sh" file cmd)
 	(filecon "/etc/dhcp/dhclient\.d/ntp\.sh" file cmd)
 	(filecon "/etc/grub\.d(/.*)?" file cmd)
@@ -39,7 +39,7 @@
 (block shell
 	(blockinherit cmd_exec_obj_blk)
 
-	(context shell (sys.id sys.role cmd (systemlow systemlow)))
+	(context shell (sys.id sys.role cmd_file (systemlow systemlow)))
 	(filecon "/usr/bin/bash" file shell)
 	(filecon "/usr/bin/git-shell" file shell)
 	(filecon "/usr/libexec/git-core/git-shell" file shell)
