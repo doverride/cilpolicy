@@ -265,6 +265,9 @@
 (macro fs_rw_devtmpfs_dirs ((type ARG1))
 	(allow ARG1 devtmpfs.fs rw_dir_perms))
 
+(macro fs_devtmpfs_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call obj_type_transition_pattern (ARG1 devtmpfs.fs ARG2 ARG3 ARG4)))
+
 (macro fs_search_proc ((type ARG1))
 	(allow ARG1 proc.fs search_dir_perms))
 

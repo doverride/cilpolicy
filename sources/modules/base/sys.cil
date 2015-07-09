@@ -52,7 +52,17 @@
 	(filecon "/var/log/boot\.log" file sys_var_log_file)
 
 	(allow subj var_log_file manage_file_perms)
-	(call file_var_log_obj_type_transition (subj var_log_file file "boot.log")))
+	(call file_var_log_obj_type_transition (subj var_log_file file "boot.log"))
+
+	(call dev_devtmpfs_obj_type_transition_event (subj))
+	(call dev_devtmpfs_obj_type_transition_sound (subj))
+	(call dev_devtmpfs_obj_type_transition_usb (subj))
+	(call dev_devtmpfs_obj_type_transition_v4l (subj))
+	(call dev_devtmpfs_obj_type_transition_watchdog (subj))
+
+	(optional sys_optional_storage
+		(call storage_devtmpfs_obj_type_transition_fixed_disk (subj))
+		(call storage_devtmpfs_obj_type_transition_removable (subj))))
 
 (block sys_proc_obj_blk
 	(blockabstract sys_proc_obj_blk)
