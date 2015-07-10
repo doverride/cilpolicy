@@ -353,18 +353,18 @@
 
 (call fs_associate_tmpfs (file_tmpfs_obj_type))
 
-(typeattribute file_except)
+(typeattribute file_except_obj_type)
 (typeattribute file_exception_obj_type)
 
-(typeattributeset file_except (and (file_obj_type) (not (file_auth_obj_type file_sec_obj_type file_exception_obj_type))))
+(typeattributeset file_except_obj_type (and (file_obj_type) (not (file_auth_obj_type file_sec_obj_type file_exception_obj_type))))
 
-(allow file_unconfined_subj_type file_except all_file_perms_except_mounton_execmod_and_entrypoint)
-(allow file_unconfined_subj_type file_except all_dir_perms_except_mounton_and_execmod)
-(allow file_unconfined_subj_type file_except all_fifo_file_perms_except_mounton_and_execmod)
-(allow file_unconfined_subj_type file_except all_lnk_file_perms_except_mounton_and_execmod)
-(allow file_unconfined_subj_type file_except all_sock_file_perms_except_mounton_and_execmod)
-(allow file_unconfined_subj_type file_except all_blk_file_perms_except_mounton_and_execmod)
-(allow file_unconfined_subj_type file_except all_chr_file_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_file_perms_except_mounton_execmod_and_entrypoint)
+(allow file_unconfined_subj_type file_except_obj_type all_dir_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_fifo_file_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_lnk_file_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_sock_file_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_blk_file_perms_except_mounton_and_execmod)
+(allow file_unconfined_subj_type file_except_obj_type all_chr_file_perms_except_mounton_and_execmod)
 
 (call file_rootfs_obj_type_transition_unknown (file_unconfined_subj_type))
 
@@ -462,10 +462,10 @@
 	(typeattributeset file_exception_obj_type ARG1))
 
 (macro file_execmod_all_except_subj_type ((type ARG1))
-	(booleanif file_execmod_all_except (true (allow ARG1 file_except (file (execmod))))))
+	(booleanif file_execmod_all_except (true (allow ARG1 file_except_obj_type (file (execmod))))))
 
 (macro file_execmod_all_except_uncond_subj_type ((type ARG1))
-	(allow ARG1 file_except (file (execmod))))
+	(allow ARG1 file_except_obj_type (file (execmod))))
 
 (macro file_unconfined_subj_type ((type ARG1))
 	(typeattributeset file_unconfined_subj_type ARG1))
