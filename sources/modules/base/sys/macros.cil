@@ -26,6 +26,9 @@
 (macro sys_subj_type ((type ARG1))
 	(typeattributeset sys_subj_type ARG1))
 
+(macro sys_role ((role ARG1))
+	(roleattributeset sys_role ARG1))
+
 (macro sys_roleallow_role ((role ARG1))
 	(roleattributeset sys_roleallow_role ARG1))
 

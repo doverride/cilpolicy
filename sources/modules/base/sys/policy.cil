@@ -24,6 +24,7 @@
 (typeattribute sys_audit_client_subj_type)
 (typeattribute sys_unconfined_subj_type)
 
+(roleattribute sys_role)
 (roleattribute sys_roleallow_role)
 
 (block sys
@@ -36,9 +37,8 @@
 
 	(roletype role subj)
 
+	(call sys_role (role))
 	(call sys_userrole (id))
-
-	(roletype role sys_obj_type)
 
 	(userlevel id systemlow)
 	(userrange id (systemlow systemhigh))
@@ -208,6 +208,8 @@
 
 (typeattributeset sys_not_security_or_usermodehelper_sysctl_obj_type
 	(and (sys_sysctl_obj_type) (not (sys_security_or_usermodehelper_sysctl_obj_type))))
+
+(roletype sys_role sys_obj_type)
 
 (allow sys_unconfined_subj_type sys_not_security_or_usermodehelper_sysctl_obj_type rw_file_perms)
 
