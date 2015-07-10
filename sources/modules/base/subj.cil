@@ -2,6 +2,7 @@
 (boolean subj_execmem false)
 (boolean subj_execstack false)
 (boolean subj_mmap_low false)
+(boolean subj_ptrace false)
 
 (typeattribute subj_entry_obj_type)
 
@@ -48,6 +49,12 @@
 
 	(context subj_mmap_low (sys.id sys.role bool (systemlow systemlow)))
 	(genfscon "selinuxfs" "/booleans/subj_mmap_low" subj_mmap_low))
+
+(block subj_ptrace
+	(blockinherit sec_bool_obj_blk)
+
+	(context subj_ptrace (sys.id sys.role bool (systemlow systemlow)))
+	(genfscon "selinuxfs" "/booleans/subj_ptrace" subj_ptrace))
 
 (call sys_subj_type (subj_common_type))
 
@@ -99,13 +106,20 @@
 
 (neverallow subj_mmap_low_type self (memprotect (mmap_zero)))
 
-(allow subj_unconfined_type self all_capability_perms_except_sys_module_and_sys_nice)
+(typeattribute subj_ptrace_type)
+(typeattribute subj_not_ptrace_type)
+
+(typeattributeset subj_not_ptrace_type (and (subj_type) (not (subj_ptrace_type))))
+
+(neverallow subj_ptrace_type self (capability (sys_ptrace)))
+
+(allow subj_unconfined_type self all_capability_perms_except_sys_module_sys_ptrace_and_sys_nice)
 (allow subj_unconfined_type self all_capability2_perms_except_mac_override_and_mac_admin)
 (allow subj_unconfined_type self (process (transition dyntransition setcurrent)))
 (allow subj_unconfined_type self all_fifo_file_perms_except_mounton_and_execmod)
 
 (allow subj_unconfined_type subj_type
-	all_process_perms_except_transition_ptrace_setsched_dyntransition_setcurrent_execmem_execstack_and_execheap)
+	all_process_perms_except_ptrace_setsched_transition_dyntransition_setcurrent_execmem_execstack_and_execheap)
 (allow subj_unconfined_type subj_type rw_file_perms)
 (allow subj_unconfined_type subj_type list_dir_perms)
 (allow subj_unconfined_type subj_type read_lnk_file_perms)
@@ -210,6 +224,14 @@
 (macro subj_mmap_low_uncond_type ((type ARG1))
 	(allow ARG1 self (memprotect (mmap_zero)))
 	(typeattributeset subj_mmap_low_uncond_type ARG1))
+
+(macro subj_ptrace_type ((type ARG1))
+	(typeattributeset subj_ptrace_type ARG1)
+	(booleanif subj_ptrace (true (allow ARG1 self (capability (sys_ptrace))))))
+
+(macro subj_ptrace_uncond_type ((type ARG1))
+	(allow ARG1 self (capability (sys_ptrace)))
+	(typeattributeset subj_ptrace_uncond_type ARG1))
 
 (macro subj_obj_id_change_exemption_type ((type ARG1))
 	(typeattributeset subj_obj_id_change_exemption_type ARG1))

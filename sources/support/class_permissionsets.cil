@@ -2,16 +2,17 @@
 (classpermissionset all_security_perms_except_load_policy_and_setenforce (security (not (load_policy setenforce))))
 
 (classpermission
-	all_process_perms_except_transition_ptrace_setsched_dyntransition_setcurrent_execmem_execstack_and_execheap)
+	all_process_perms_except_ptrace_setsched_transition_dyntransition_setcurrent_execmem_execstack_and_execheap)
 (classpermissionset
-	all_process_perms_except_transition_ptrace_setsched_dyntransition_setcurrent_execmem_execstack_and_execheap
-	(process (not (transition ptrace setsched dyntransition setcurrent execmem execstack execheap))))
+	all_process_perms_except_ptrace_setsched_transition_dyntransition_setcurrent_execmem_execstack_and_execheap
+	(process (not (ptrace setsched transition dyntransition setcurrent execmem execstack execheap))))
 
 (classpermission signal_perms)
 (classpermissionset signal_perms (process (sigchld sigkill sigstop signull signal)))
 
-(classpermission all_capability_perms_except_sys_module_and_sys_nice)
-(classpermissionset all_capability_perms_except_sys_module_and_sys_nice (capability (not (sys_module sys_nice))))
+(classpermission all_capability_perms_except_sys_module_sys_ptrace_and_sys_nice)
+(classpermissionset all_capability_perms_except_sys_module_sys_ptrace_and_sys_nice
+	(capability (not (sys_module sys_ptrace sys_nice))))
 
 (classpermission mount_fs_perms)
 (classpermissionset mount_fs_perms (filesystem (mount remount unmount getattr)))
