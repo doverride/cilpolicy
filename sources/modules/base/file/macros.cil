@@ -1,0 +1,205 @@
+(block file_obj_blk
+	(blockabstract file_obj_blk)
+
+	(type file)
+	(call file_obj_type (file)))
+
+(block file_auth_obj_blk
+	(blockabstract file_auth_obj_blk)
+
+	(type auth_file)
+	(call file_auth_obj_type (auth_file)))
+
+(block file_sec_obj_blk
+	(blockabstract file_sec_obj_blk)
+
+	(type sec_file)
+	(call file_sec_obj_type (sec_file)))
+
+(block file_boot_obj_blk
+	(blockabstract file_boot_obj_blk)
+
+	(type boot_file)
+	(call file_boot_obj_type (boot_file)))
+
+(block file_boot_flag_obj_blk
+	(blockabstract file_boot_flag_obj_blk)
+
+	(type boot_flag_file)
+	(call file_boot_flag_obj_type (boot_flag_file)))
+
+(block file_config_obj_blk
+	(blockabstract file_config_obj_blk)
+
+	(type config_file)
+	(call file_config_obj_type (config_file)))
+
+(block file_config_runtime_obj_blk
+	(blockabstract file_config_runtime_obj_blk)
+
+	(type config_runtime_file)
+	(call file_config_runtime_obj_type (config_runtime_file)))
+
+(block file_data_obj_blk
+	(blockabstract file_data_obj_blk)
+
+	(type data_file)
+	(call file_data_obj_type (data_file)))
+
+(block file_runtime_obj_blk
+	(blockabstract file_runtime_obj_blk)
+
+	(type runtime_file)
+	(call file_runtime_obj_type (runtime_file)))
+
+(block file_runtime_lock_obj_blk
+	(blockabstract file_runtime_lock_obj_blk)
+
+	(type runtime_lock_file)
+	(call file_runtime_lock_obj_type (runtime_lock_file)))
+
+(block file_var_obj_blk
+	(blockabstract file_var_obj_blk)
+
+	(type var_file)
+	(call file_var_obj_type (var_file)))
+
+(block file_var_cache_obj_blk
+	(blockabstract file_var_cache_obj_blk)
+
+	(type var_cache_file)
+	(call file_var_cache_obj_type (var_cache_file)))
+
+(block file_var_lib_obj_blk
+	(blockabstract file_var_lib_obj_blk)
+
+	(type var_lib_file)
+	(call file_var_lib_obj_type (var_lib_file)))
+
+(block file_var_log_obj_blk
+	(blockabstract file_var_log_obj_blk)
+
+	(type var_log_file)
+	(call file_var_log_obj_type (var_log_file)))
+
+(block file_var_spool_obj_blk
+	(blockabstract file_var_spool_obj_blk)
+
+	(type var_spool_file)
+	(call file_var_spool_obj_type (var_spool_file)))
+
+(block file_var_tmp_obj_blk
+	(blockabstract file_var_tmp_obj_blk)
+
+	(type var_tmp_file)
+	(call file_var_tmp_obj_type (var_tmp_file)))
+
+(block file_tmpfs_obj_blk
+	(blockabstract file_tmpfs_obj_blk)
+
+	(type tmpfs_file)
+	(call file_tmpfs_obj_type (tmpfs_file)))
+
+(macro file_obj_type ((type ARG1))
+	(typeattributeset file_obj_type ARG1)
+	(typeattributeset file_non_auth_obj_type ARG1)
+	(typeattributeset file_non_sec_obj_type ARG1))
+
+(macro file_auth_obj_type ((type ARG1))
+	(typeattributeset file_obj_type ARG1)
+	(typeattributeset file_auth_obj_type ARG1))
+
+(macro file_sec_obj_type ((type ARG1))
+	(typeattributeset file_obj_type ARG1)
+	(typeattributeset file_sec_obj_type ARG1))
+
+(macro file_boot_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_boot_obj_type ARG1))
+
+(macro file_boot_flag_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_boot_flag_obj_type ARG1))
+
+(macro file_config_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_config_obj_type ARG1))
+
+(macro file_config_runtime_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_config_runtime_obj_type ARG1))
+
+(macro file_data_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_data_obj_type ARG1))
+
+(macro file_runtime_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_runtime_obj_type ARG1))
+
+(macro file_runtime_lock_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_runtime_lock_obj_type ARG1))
+
+(macro file_var_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_obj_type ARG1))
+
+(macro file_var_cache_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_cache_obj_type ARG1))
+
+(macro file_var_lib_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_lib_obj_type ARG1))
+
+(macro file_var_log_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_log_obj_type ARG1))
+
+(macro file_var_spool_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_spool_obj_type ARG1))
+
+(macro file_var_tmp_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_var_tmp_obj_type ARG1))
+
+(macro file_tmpfs_obj_type ((type ARG1))
+	(call file_obj_type (ARG1))
+	(typeattributeset file_tmpfs_obj_type ARG1))
+
+(macro file_search_var ((type ARG1))
+	(allow ARG1 var.var_file search_dir_perms))
+
+(macro file_rw_var_log_dirs ((type ARG1))
+	(call file_search_var (ARG1))
+	(allow ARG1 var_log.var_log_file rw_dir_perms))
+
+(macro file_var_log_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call file_search_var (ARG1))
+	(call obj_type_transition_pattern (ARG1 var_log.var_log_file ARG2 ARG3 ARG4)))
+
+(macro file_rootfs_obj_type_transition_unknown ((type ARG1))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file dir "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file fifo_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file lnk_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file sock_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file blk_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file chr_file "*")))
+
+(macro file_spec_exception ((type ARG1)(type ARG2))
+	(typeattributeset ARG1 (and (file_obj_type) (not (file_auth_obj_type file_sec_obj_type file_exception_obj_type ARG2)))))
+
+(macro file_exception_obj_type ((type ARG1))
+	(typeattributeset file_exception_obj_type ARG1))
+
+(macro file_execmod_all_except_subj_type ((type ARG1))
+	(booleanif file_execmod_all_except (true (allow ARG1 file_except_obj_type (file (execmod))))))
+
+(macro file_execmod_all_except_uncond_subj_type ((type ARG1))
+	(allow ARG1 file_except_obj_type (file (execmod))))
+
+(macro file_unconfined_subj_type ((type ARG1))
+	(typeattributeset file_unconfined_subj_type ARG1))

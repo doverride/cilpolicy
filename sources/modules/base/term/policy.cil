@@ -1,0 +1,15 @@
+(typeattribute term_pty_obj_type)
+(typeattribute term_serial_obj_type)
+(typeattribute term_server_pty_obj_type)
+(typeattribute term_tty_obj_type)
+
+(block console
+	(blockinherit dev_obj_blk))
+
+(block tty
+	(blockinherit term_serial_obj_blk))
+
+(block virtio
+	(blockinherit term_serial_obj_blk))
+
+(call fs_associate_devpts (term_pty_obj_type))

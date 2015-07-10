@@ -1,4 +1,2 @@
-(typeattribute mcs_constrained_subj_type)
-
 (macro mcs_constrained_subj_type ((type ARG1))
 	(typeattributeset mcs_constrained_subj_type ARG1))

@@ -1,0 +1,8 @@
+(block lib_obj_blk
+	(blockabstract lib_obj_blk)
+
+	(type lib_file)
+	(call lib_obj_type (lib_file)))
+
+(macro lib_obj_type ((type ARG1))
+	(typeattributeset lib_obj_type ARG1))

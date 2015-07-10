@@ -1,0 +1,62 @@
+(block fs_obj_blk
+	(blockabstract fs_obj_blk)
+
+	(type fs)
+	(call fs_obj_type (fs)))
+
+(macro fs_obj_type ((type ARG1))
+	(typeattributeset fs_obj_type ARG1))
+
+(macro fs_associate_fs ((type ARG1))
+	(allow ARG1 fs.fs (filesystem (associate))))
+
+(macro fs_associate_devtmpfs ((type ARG1))
+	(allow ARG1 devtmpfs.fs (filesystem (associate))))
+
+(macro fs_associate_devpts ((type ARG1))
+	(allow ARG1 devpts.fs (filesystem (associate))))
+
+(macro fs_associate_tmpfs ((type ARG1))
+	(allow ARG1 tmpfs.fs (filesystem (associate))))
+
+(macro fs_read_debugfs ((type ARG1))
+	(call fs_search_proc (ARG1))
+	(allow ARG1 debugfs.fs list_dir_perms)
+	(allow ARG1 debugfs.fs read_file_perms)
+	(allow ARG1 debugfs.fs read_lnk_file_perms))
+
+(macro fs_search_devtmpfs ((type ARG1))
+	(allow ARG1 devtmpfs.fs search_dir_perms))
+
+(macro fs_rw_devtmpfs_dirs ((type ARG1))
+	(allow ARG1 devtmpfs.fs rw_dir_perms))
+
+(macro fs_devtmpfs_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call obj_type_transition_pattern (ARG1 devtmpfs.fs ARG2 ARG3 ARG4)))
+
+(macro fs_search_proc ((type ARG1))
+	(allow ARG1 proc.fs search_dir_perms))
+
+(macro fs_list_proc ((type ARG1))
+	(allow ARG1 proc.fs list_dir_perms))
+
+(macro fs_rw_proc_dirs ((type ARG1))
+	(allow ARG1 proc.fs rw_dir_perms))
+
+(macro fs_search_rootfs ((type ARG1))
+	(allow ARG1 rootfs.fs search_dir_perms))
+
+(macro fs_list_rootfs ((type ARG1))
+	(allow ARG1 rootfs.fs list_dir_perms))
+
+(macro fs_mounton_rootfs_dirs ((type ARG1))
+	(allow ARG1 rootfs.fs (dir (mounton))))
+
+(macro fs_rootfs_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
+	(call obj_type_transition_pattern (ARG1 rootfs.fs ARG2 ARG3 ARG4)))
+
+(macro fs_search_sysfs ((type ARG1))
+	(allow ARG1 sysfs.fs search_dir_perms))
+
+(macro fs_unconfined_subj_type ((type ARG1))
+	(typeattributeset fs_unconfined_subj_type ARG1))

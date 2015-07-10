@@ -1,0 +1,92 @@
+(block dev_obj_blk
+	(blockabstract dev_obj_blk)
+
+	(type dev)
+	(call dev_obj_type (dev)))
+
+(block dev_storage_obj_blk
+	(blockabstract dev_storage_obj_blk)
+
+	(type storage_dev)
+	(call dev_storage_obj_type (storage_dev)))
+
+(macro dev_obj_type ((type ARG1))
+	(typeattributeset dev_obj_type ARG1))
+
+(macro dev_storage_obj_type ((type ARG1))
+	(call dev_obj_type (ARG1))
+	(typeattributeset dev_storage_obj_type ARG1))
+
+(macro dev_manage_all ((type ARG1))
+	(call fs_rw_devtmpfs_dirs (ARG1))
+	(allow ARG1 dev_except_storage manage_chr_file_perms)
+	(typeattributeset dev_can_read_memory ARG1)
+	(typeattributeset dev_can_write_memory ARG1)
+	(optional dev_manage_all_optional_storage
+		(call storage_manage_all (ARG1))))
+
+(macro dev_rw_all ((type ARG1))
+	(call fs_search_devtmpfs (ARG1))
+	(allow ARG1 dev_except_storage rw_chr_file_perms)
+	(typeattributeset dev_can_read_memory ARG1)
+	(typeattributeset dev_can_write_memory ARG1)
+	(optional dev_rw_all_optional_storage
+		(call storage_rw_all (ARG1))))
+
+(macro dev_write_all ((type ARG1))
+	(call fs_search_devtmpfs (ARG1))
+	(allow ARG1 dev_except_storage write_chr_file_perms)
+	(typeattributeset dev_can_write_memory ARG1)
+	(optional dev_write_all_optional_storage
+		(call storage_write_all (ARG1))))
+
+(macro dev_devtmpfs_obj_type_transition_event ((type ARG1))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event0"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event1"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event2"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event3"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event4"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event5"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event6"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event7"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event8"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event9"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event10"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event11"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event12"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event13"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event14"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 event.dev chr_file "event15")))
+
+(macro dev_devtmpfs_obj_type_transition_sound ((type ARG1))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "pcmC1D0c"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "pcmC1D0p"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "pcmC2D0c"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "pcmC2D0p"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "controlC0"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "controlC1"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 sound.dev chr_file "controlC2")))
+
+(macro dev_devtmpfs_obj_type_transition_usb ((type ARG1))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "001"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "002"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "003"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "004"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "005"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "006"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "007"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "008"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 usb.dev chr_file "009")))
+
+(macro dev_devtmpfs_obj_type_transition_v4l ((type ARG1))
+	(call fs_devtmpfs_obj_type_transition (ARG1 v4l.dev chr_file "video0"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 v4l.dev chr_file "video1"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 v4l.dev chr_file "video2")))
+
+(macro dev_devtmpfs_obj_type_transition_watchdog ((type ARG1))
+	(call fs_devtmpfs_obj_type_transition (ARG1 watchdog.dev chr_file "watchdog"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 watchdog.dev chr_file "watchdog0"))
+	(call fs_devtmpfs_obj_type_transition (ARG1 watchdog.dev chr_file "watchdog1")))
+
+(macro dev_unconfined_subj_type ((type ARG1))
+	(typeattributeset dev_unconfined_subj_type ARG1))

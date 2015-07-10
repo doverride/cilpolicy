@@ -1,0 +1,80 @@
+(block subj_blk
+	(blockabstract subj_blk)
+
+	(type subj)
+	(call subj_type (subj)))
+
+(block subj_common_blk
+	(blockabstract subj_common_blk)
+
+	(type subj)
+	(call subj_common_type (subj)))
+
+(macro subj_type ((type ARG1))
+	(typeattributeset subj_type ARG1))
+
+(macro subj_common_type ((type ARG1))
+	(call subj_type (ARG1))
+	(typeattributeset subj_common_type ARG1))
+
+(macro subj_entry ((type ARG1)(type ARG2))
+	(allow ARG1 ARG2 (file (entrypoint)))
+	(allow ARG1 ARG2 mmap_file_perms)
+	(call subj_entry_obj_type (ARG2)))
+
+(macro subj_entry_obj_type ((type ARG1))
+	(typeattributeset subj_entry_obj_type ARG1))
+
+(macro subj_dynamic_subj_type_transition_type ((type ARG1))
+	(typeattributeset subj_dynamic_subj_type_transition_type ARG1))
+
+(macro subj_execheap_type ((type ARG1))
+	(typeattributeset subj_execheap_type ARG1)
+	(booleanif subj_execheap (true (allow ARG1 self (process (execheap))))))
+
+(macro subj_execheap_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execheap)))
+	(typeattributeset subj_execheap_type ARG1))
+
+(macro subj_execmem_type ((type ARG1))
+	(typeattributeset subj_execmem_type ARG1)
+	(booleanif subj_execmem (true (allow ARG1 self (process (execmem))))))
+
+(macro subj_execmem_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execmem)))
+	(typeattributeset subj_execmem_type ARG1))
+
+(macro subj_execstack_type ((type ARG1))
+	(typeattributeset subj_execmem_type ARG1)
+	(typeattributeset subj_execstack_type ARG1)
+	(booleanif subj_execstack (true (allow ARG1 self (process (execmem execstack))))))
+
+(macro subj_execstack_uncond_type ((type ARG1))
+	(allow ARG1 self (process (execmem execstack)))
+	(typeattributeset subj_execmem_type ARG1)
+	(typeattributeset subj_execstack_type ARG1))
+
+(macro subj_mmap_low_type ((type ARG1))
+	(typeattributeset subj_mmap_low_type ARG1)
+	(booleanif subj_mmap_low (true (allow ARG1 self (memprotect (mmap_zero))))))
+
+(macro subj_mmap_low_uncond_type ((type ARG1))
+	(allow ARG1 self (memprotect (mmap_zero)))
+	(typeattributeset subj_mmap_low_uncond_type ARG1))
+
+(macro subj_ptrace_type ((type ARG1))
+	(typeattributeset subj_ptrace_type ARG1)
+	(booleanif subj_ptrace (true (allow ARG1 self (capability (sys_ptrace))))))
+
+(macro subj_ptrace_uncond_type ((type ARG1))
+	(allow ARG1 self (capability (sys_ptrace)))
+	(typeattributeset subj_ptrace_uncond_type ARG1))
+
+(macro subj_obj_id_change_exemption_type ((type ARG1))
+	(typeattributeset subj_obj_id_change_exemption_type ARG1))
+
+(macro subj_uncond_exemption_type ((type ARG1))
+	(typeattributeset subj_uncond_exempt_type ARG1))
+
+(macro subj_unconfined_type ((type ARG1))
+	(typeattributeset subj_unconfined_type ARG1))

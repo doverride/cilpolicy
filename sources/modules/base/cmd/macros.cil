@@ -1,0 +1,8 @@
+(block cmd_exec_obj_blk
+	(blockabstract cmd_exec_obj_blk)
+
+	(type cmd_file)
+	(call cmd_exec_obj_type (cmd_file)))
+
+(macro cmd_exec_obj_type ((type ARG1))
+	(typeattributeset cmd_exec_obj_type ARG1))
