@@ -442,6 +442,10 @@
 (macro file_search_var ((type ARG1))
 	(allow ARG1 var.var_file search_dir_perms))
 
+(macro file_rw_var_log_dirs ((type ARG1))
+	(call file_search_var (ARG1))
+	(allow ARG1 var_log.var_log_file rw_dir_perms))
+
 (macro file_var_log_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
 	(call file_search_var (ARG1))
 	(call obj_type_transition_pattern (ARG1 var_log.var_log_file ARG2 ARG3 ARG4)))

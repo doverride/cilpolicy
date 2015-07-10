@@ -31,26 +31,29 @@
 
 (call sys_obj_type (sec_bool_obj_type))
 
-(typeattribute sec_can_load_policy)
-(typeattribute sec_can_not_load_policy_or_sec_unconfined_subj_type)
+(typeattribute sec_load_policy_subj_type)
+(typeattribute sec_not_load_policy_subj_type_or_sec_unconfined_subj_type)
 
-(typeattributeset sec_can_not_load_policy_or_sec_unconfined_subj_type (not (sec_can_load_policy sec_unconfined_subj_type)))
+(typeattributeset sec_not_load_policy_subj_type_or_sec_unconfined_subj_type
+	(not (sec_load_policy_subj_type sec_unconfined_subj_type)))
 
-(neverallow sec_can_not_load_policy_or_sec_unconfined_subj_type securityfs.fs (security (load_policy)))
+(neverallow sec_not_load_policy_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (load_policy)))
 
-(typeattribute sec_can_setenforce)
-(typeattribute sec_can_not_setenforce_or_sec_unconfined_subj_type)
+(typeattribute sec_setenforce_subj_type)
+(typeattribute sec_not_setenforce_subj_type_or_sec_unconfined_subj_type)
 
-(typeattributeset sec_can_not_setenforce_or_sec_unconfined_subj_type (not (sec_can_setenforce sec_unconfined_subj_type)))
+(typeattributeset sec_not_setenforce_subj_type_or_sec_unconfined_subj_type
+	(not (sec_setenforce_subj_type sec_unconfined_subj_type)))
 
-(neverallow sec_can_not_setenforce_or_sec_unconfined_subj_type securityfs.fs (security (setenforce)))
+(neverallow sec_not_setenforce_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (setenforce)))
 
-(typeattribute sec_can_setsecparam)
-(typeattribute sec_can_not_setsecparam_or_sec_unconfined_subj_type)
+(typeattribute sec_setsecparam_subj_type)
+(typeattribute sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type)
 
-(typeattributeset sec_can_not_setsecparam_or_sec_unconfined_subj_type (not (sec_can_setsecparam sec_unconfined_subj_type)))
+(typeattributeset sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type
+	(not (sec_setsecparam_subj_type sec_unconfined_subj_type)))
 
-(neverallow sec_can_not_setsecparam_or_sec_unconfined_subj_type securityfs.fs (security (setsecparam)))
+(neverallow sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (setsecparam)))
 
 (allow sec_unconfined_subj_type securityfs.fs list_dir_perms)
 (allow sec_unconfined_subj_type securityfs.fs read_lnk_file_perms)
@@ -69,6 +72,97 @@
 
 (macro sec_bool_obj_type ((type ARG1))
 	(typeattributeset sec_bool_obj_type ARG1))
+
+(macro sec_search_fs ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 securityfs.fs search_dir_perms))
+
+(macro sec_list_fs ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 securityfs.fs list_dir_perms))
+
+(macro sec_getattr_fs ((type ARG1))
+	(allow ARG1 securityfs.fs (filesystem (getattr))))
+
+(macro sec_remount_fs ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 securityfs.fs (filesystem (remount))))
+
+(macro sec_compute_access_vector ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (compute_av))))
+
+(macro sec_compute_create_context ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (compute_create))))
+
+(macro sec_compute_relabel_context ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (compute_relabel))))
+
+(macro sec_compute_user_contexts ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (compute_user))))
+
+(macro sec_get_enforce_mode ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call read_files_pattern (ARG1 securityfs.fs securityfs.fs)))
+
+(macro sec_load_policy_subj_type ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(typeattributeset sec_load_policy_subj_type ARG1)
+	(booleanif (sec_load_policy) (true (allow ARG1 securityfs.fs (security (load_policy))))))
+
+(macro sec_read_policy ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call read_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (read_policy))))
+
+(macro sec_get_all_booleans ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 sec_bool_obj_type read_file_perms)
+	(call read_files_pattern (ARG1 securityfs.fs securityfs.fs)))
+
+(macro sec_set_all_booleans ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 sec_bool_obj_type_except_sec_load_policy rw_file_perms)
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (setbool)))
+	(booleanif (sec_load_policy) (true (allow ARG1 sec_load_policy.bool (file (append write))))))
+
+(macro sec_set_spec_boolean ((type ARG1)(type ARG2))
+	(call fs_search_sysfs (ARG1))
+	(allow ARG1 ARG2 rw_file_perms)
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (setbool))))
+
+(macro sec_set_check_req_prot ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (setcheckreqprot))))
+
+(macro sec_set_enforce_mode ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(typeattributeset sec_setenforce_subj_type ARG1)
+	(booleanif (sec_load_policy) (true (allow ARG1 securityfs.fs (security (setenforce))))))
+
+(macro sec_set_params ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (setsecparam)))
+	(auditallow ARG1 securityfs.fs (security (setsecparam)))
+	(typeattributeset sec_setsecparam_subj_type ARG1))
+
+(macro sec_validate_context ((type ARG1))
+	(call fs_search_sysfs (ARG1))
+	(call rw_files_pattern (ARG1 securityfs.fs securityfs.fs))
+	(allow ARG1 securityfs.fs (security (check_context))))
 
 (macro sec_unconfined_subj_type ((type ARG1))
 	(typeattributeset sec_unconfined_subj_type ARG1))

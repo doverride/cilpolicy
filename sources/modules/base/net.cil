@@ -147,6 +147,11 @@
 (allow net_unconfined_subj_type net_node_obj_type (rawip_socket (node_bind)))
 (allow net_unconfined_subj_type net_node_obj_type (dccp_socket (node_bind)))
 
+(call sys_recvfrom_unlabeled_tcp_sockets (net_unconfined_subj_type))
+(call sys_recvfrom_unlabeled_udp_sockets (net_unconfined_subj_type))
+(call sys_recvfrom_unlabeled_rawip_sockets (net_unconfined_subj_type))
+(call sys_recvfrom_unlabeled_dccp_sockets (net_unconfined_subj_type))
+
 (call sys_recv_unlabeled_peers (net_unconfined_subj_type))
 
 (macro net_if_obj_type ((type ARG1))

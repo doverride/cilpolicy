@@ -37,7 +37,7 @@
 	(typeattributeset mls_file_read_to_clr_subj_type ARG1))
 
 (macro mls_file_read_subj_type ((type ARG1))
-	(typeattributeset mls_file_read_sub_type ARG1))
+	(typeattributeset mls_file_read_subj_type ARG1))
 
 (macro mls_file_write_to_clr_subj_type ((type ARG1))
 	(typeattributeset mls_file_write_to_clr_subj_type ARG1))
@@ -48,7 +48,7 @@
 (macro mls_file_upgrade_subj_type ((type ARG1))
 	(typeattributeset mls_file_upgrade_subj_type ARG1))
 
-(macro mls_file_downgrade_sub_type ((type ARG1))
+(macro mls_file_downgrade_subj_type ((type ARG1))
 	(typeattributeset mls_file_downgrade_subj_type ARG1))
 
 (macro mls_file_write_in_range_subj_type ((type ARG1))
