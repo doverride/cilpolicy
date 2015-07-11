@@ -448,15 +448,6 @@
 (macro file_mounton_mnt_dirs ((type ARG1))
 	(allow ARG1 mnt.file (dir (mounton))))
 
-(macro file_rootfs_obj_type_transition_unknown ((type ARG1))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file file "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file dir "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file fifo_file "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file lnk_file "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file sock_file "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file blk_file "*"))
-	(call fs_rootfs_obj_type_transition (ARG1 unknown.file chr_file "*")))
-
 (macro file_search_runtime ((type ARG1))
 	(call file_search_var (ARG1))
 	(allow ARG1 runtime.runtime_file read_lnk_file_perms)
@@ -806,6 +797,15 @@
 	(allow ARG1 unknown.file manage_fifo_file_perms)
 	(allow ARG1 unknown.file manage_lnk_file_perms)
 	(allow ARG1 unknown.file manage_sock_file_perms))
+
+(macro file_rootfs_obj_type_transition_unknown ((type ARG1))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file dir "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file fifo_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file lnk_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file sock_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file blk_file "*"))
+	(call fs_rootfs_obj_type_transition (ARG1 unknown.file chr_file "*")))
 
 (macro file_search_var ((type ARG1))
 	(allow ARG1 var.var_file search_dir_perms))
