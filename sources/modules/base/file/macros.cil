@@ -614,7 +614,7 @@
 	(call read_files_pattern (ARG1 file_runtime_config_obj_type file_runtime_config_obj_type)))
 
 (macro file_read_all_runtime_config_lnk_files ((type ARG1))
-	(call files_search_runtime (ARG1))
+	(call file_search_runtime (ARG1))
 	(call read_lnk_files_pattern (ARG1 file_runtime_config_obj_type file_runtime_config_obj_type)))
 
 (macro file_read_all_runtime_config ((type ARG1))
