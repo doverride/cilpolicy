@@ -115,7 +115,7 @@
 
 (typeattributeset subj_not_mmap_low_type (and (subj_type) (not (subj_mmap_low_type))))
 
-(neverallow subj_mmap_low_type self (memprotect (mmap_zero)))
+(neverallow subj_not_mmap_low_type self (memprotect (mmap_zero)))
 
 (typeattribute subj_ptrace_type)
 (typeattribute subj_not_ptrace_type)
