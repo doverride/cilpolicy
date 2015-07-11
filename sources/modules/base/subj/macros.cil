@@ -60,7 +60,7 @@
 
 (macro subj_mmap_low_uncond_type ((type ARG1))
 	(allow ARG1 self (memprotect (mmap_zero)))
-	(typeattributeset subj_mmap_low_uncond_type ARG1))
+	(typeattributeset subj_mmap_low_type ARG1))
 
 (macro subj_ptrace_type ((type ARG1))
 	(typeattributeset subj_ptrace_type ARG1)
@@ -68,7 +68,7 @@
 
 (macro subj_ptrace_uncond_type ((type ARG1))
 	(allow ARG1 self (capability (sys_ptrace)))
-	(typeattributeset subj_ptrace_uncond_type ARG1))
+	(typeattributeset subj_ptrace_type ARG1))
 
 (macro subj_obj_id_change_exemption_type ((type ARG1))
 	(typeattributeset subj_obj_id_change_exemption_type ARG1))
