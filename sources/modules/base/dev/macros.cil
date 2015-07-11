@@ -350,23 +350,18 @@
 	(allow ARG1 zero.dev rw_chr_file_perms))
 
 (macro dev_setattr_dri ((type ARG1))
-	(call fs_search_devtmpfs (ARG1))
 	(allow ARG1 dri.dev (chr_file (setattr))))
 
 (macro dev_setattr_kvm ((type ARG1))
-	(call fs_search_devtmpfs (ARG1))
 	(allow ARG1 kvm.dev (chr_file (setattr))))
 
 (macro dev_setattr_sound ((type ARG1))
-	(call fs_search_devtmpfs (ARG1))
 	(allow ARG1 sound.dev (chr_file (setattr))))
 
 (macro dev_setattr_wireless ((type ARG1))
-	(call fs_search_devtmpfs (ARG1))
 	(allow ARG1 wireless.dev (chr_file (setattr))))
 
 (macro dev_setattr_v4l ((type ARG1))
-	(call fs_search_devtmpfs (ARG1))
 	(allow ARG1 v4l.dev (chr_file (setattr))))
 
 (macro dev_write_kmsg ((type ARG1))

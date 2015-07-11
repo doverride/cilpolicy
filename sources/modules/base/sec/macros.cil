@@ -19,7 +19,6 @@
 	(allow ARG1 securityfs.fs (filesystem (getattr))))
 
 (macro sec_remount_fs ((type ARG1))
-	(call fs_search_sysfs (ARG1))
 	(allow ARG1 securityfs.fs (filesystem (remount))))
 
 (macro sec_compute_access_vector ((type ARG1))

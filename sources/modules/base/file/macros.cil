@@ -497,7 +497,14 @@
 	(allow ARG1 runtime.runtime_file manage_sock_file_perms)
 	(allow ARG1 runtime.runtime_file manage_lnk_file_perms))
 
+(macro file_add_entry_runtime ((type ARG1))
+	(call file_search_var (ARG1))
+	(allow ARG1 runtime.runtime_file read_lnk_file_perms)
+	(allow ARG1 runtime.runtime_file add_entry_dir_perms))
+
 (macro file_del_entry_runtime ((type ARG1))
+	(call file_search_var (ARG1))
+	(allow ARG1 runtime.runtime_file read_lnk_file_perms)
 	(allow ARG1 runtime.runtime_file del_entry_dir_perms))
 
 (macro file_mounton_runtime_dirs ((type ARG1))
@@ -509,6 +516,7 @@
 	(call search_dirs_pattern (ARG1 runtime.runtime_file file_runtime_obj_type)))
 
 (macro file_list_all_runtime ((type ARG1))
+	(call file_search_var (ARG1))
 	(allow ARG1 runtime.runtime_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 runtime.runtime_file file_runtime_obj_type)))
 
@@ -573,18 +581,24 @@
 	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_config.runtime_config_file read_file_perms)
 	(allow ARG1 runtime_config.runtime_config_file list_dir_perms)
-	(allow ARG1 runtime_config.runtime_config_file read_lnk_file_perms))
+	(allow ARG1 runtime_config.runtime_config_file read_fifo_file_perms)
+	(allow ARG1 runtime_config.runtime_config_file read_lnk_file_perms)
+	(allow ARG1 runtime_config.runtime_config_file read_sock_file_perms))
 
 (macro file_manage_runtime_config ((type ARG1))
 	(call file_rw_runtime_dirs (ARG1))
 	(allow ARG1 runtime_config.runtime_config_file manage_file_perms)
 	(allow ARG1 runtime_config.runtime_config_file manage_dir_perms)
-	(allow ARG1 runtime_config.runtime_config_file manage_lnk_file_perms))
+	(allow ARG1 runtime_config.runtime_config_file manage_fifo_file_perms)
+	(allow ARG1 runtime_config.runtime_config_file manage_lnk_file_perms)
+	(allow ARG1 runtime_config.runtime_config_file manage_sock_file_perms))
 
 (macro file_add_entry_runtime_config ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_config.runtime_config_file add_entry_dir_perms))
 
 (macro file_del_entry_runtime_config ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_config.runtime_config_file del_entry_dir_perms))
 
 (macro file_search_all_runtime_config ((type ARG1))
@@ -596,27 +610,35 @@
 	(allow ARG1 file_runtime_config_obj_type list_dir_perms))
 
 (macro file_read_all_runtime_config_files ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(call read_files_pattern (ARG1 file_runtime_config_obj_type file_runtime_config_obj_type)))
 
 (macro file_read_all_runtime_config_lnk_files ((type ARG1))
+	(call files_search_runtime (ARG1))
 	(call read_lnk_files_pattern (ARG1 file_runtime_config_obj_type file_runtime_config_obj_type)))
 
 (macro file_read_all_runtime_config ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 file_runtime_config_obj_type read_file_perms)
 	(allow ARG1 file_runtime_config_obj_type list_dir_perms)
-	(allow ARG1 file_runtime_config_obj_type read_lnk_file_perms))
+	(allow ARG1 file_runtime_config_obj_type read_fifo_file_perms)
+	(allow ARG1 file_runtime_config_obj_type read_link_file_perms)
+	(allow ARG1 file_runtime_config_obj_type read_sock_file_perms))
 
 (macro file_manage_all_runtime_config ((type ARG1))
 	(call file_rw_runtime_dirs (ARG1))
 	(allow ARG1 file_runtime_config_obj_type manage_file_perms)
 	(allow ARG1 file_runtime_config_obj_type manage_dir_perms)
-	(allow ARG1 file_runtime_config_obj_type manage_lnk_file_perms))
+	(allow ARG1 file_runtime_config_obj_type manage_fifo_file_perms)
+	(allow ARG1 file_runtime_config_obj_type manage_lnk_file_perms)
+	(allow ARG1 file_runtime_config_obj_type manage_sock_file_perms))
 
 (macro file_runtime_config_obj_type_transition_runtime_config_dirs ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(call file_runtime_obj_type_transition (ARG1 runtime_config.runtime_config_file dir "sysconfig")))
 
 (macro file_runtime_config_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
-	(call file_search_runtime_config (ARG1))
+	(call file_search_runtime (ARG1))
 	(call obj_type_transition_pattern (ARG1 runtime_config.runtime_config_file. ARG2 ARG3 ARG4)))
 
 (macro file_search_runtime_lock ((type ARG1))
@@ -637,7 +659,7 @@
 	(dontaudit ARG1 runtime_lock.runtime_lock_file (dir (audit_access))))
 
 (macro file_rw_runtime_lock_dirs ((type ARG1))
-	(call file_search_runtime (ARG1))
+	(call file_search_runtime_lock (ARG1))
 	(allow ARG1 runtime_lock.runtime_lock_file rw_dir_perms))
 
 (macro file_read_runtime_lock ((type ARG1))
@@ -657,14 +679,16 @@
 	(allow ARG1 runtime_lock_runtime_lock_file manage_lnk_file_perms))
 
 (macro file_relabelto_runtime_lock_dirs ((type ARG1))
-	(call file_search_runtime (ARG1))
+	(call file_search_runtime_lock (ARG1))
 	(allow ARG1 runtime_lock.runtime_lock_file relabelto_dir_perms))
 
 (macro file_search_all_runtime_lock ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_lock.runtime_lock_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 runtime_lock.runtime_lock_file file_runtime_lock_obj_type)))
 
 (macro file_list_all_runtime_lock ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_lock.runtime_lock_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 runtime_lock.runtime_lock_file file_runtime_lock_obj_type)))
 
@@ -705,9 +729,11 @@
 	(allow ARG1 runtime_user.runtime_file list_dir_perms))
 
 (macro file_add_entry_runtime_user ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_user.runtime_file add_entry_dir_perms))
 
 (macro file_del_entry_runtime_user ((type ARG1))
+	(call file_search_runtime (ARG1))
 	(allow ARG1 runtime_user.runtime_file del_entry_dir_perms))
 
 (macro file_rw_runtime_user_dirs ((type ARG1))
@@ -770,14 +796,16 @@
 	(allow ARG1 unknown.file read_file_perms)
 	(allow ARG1 unknown.file list_dir_perms)
 	(allow ARG1 unknown.file read_fifo_file_perms)
-	(allow ARG1 unknown.file read_lnk_file_perms))
+	(allow ARG1 unknown.file read_lnk_file_perms)
+	(allow ARG1 unknown.file read_sock_file_perms))
 
 (macro file_manage_unknown ((type ARG1))
 	(call fs_rw_rootfs_dirs (ARG1))
 	(allow ARG1 unknown.file manage_file_perms)
 	(allow ARG1 unknown.file manage_dir_perms)
 	(allow ARG1 unknown.file manage_fifo_file_perms)
-	(allow ARG1 unknown.file manage_lnk_file_perms))
+	(allow ARG1 unknown.file manage_lnk_file_perms)
+	(allow ARG1 unknown.file manage_sock_file_perms))
 
 (macro file_search_var ((type ARG1))
 	(allow ARG1 var.var_file search_dir_perms))
@@ -1023,6 +1051,10 @@
 	(call file_search_var (ARG1))
 	(allow ARG1 var_log.var_log_file add_entry_dir_perms))
 
+(macro file_del_entry_var_log ((type ARG1))
+	(call file_search_var (ARG1))
+	(allow ARG1 var_log.var_log_file del_entry_dir_perms))
+
 (macro file_rw_var_log_dirs ((type ARG1))
 	(call file_search_var (ARG1))
 	(allow ARG1 var_log.var_log_file rw_dir_perms))
@@ -1109,10 +1141,12 @@
 	(allow ARG1 var_spool.var_spool_file manage_lnk_file_perms))
 
 (macro file_search_all_var_spool ((type ARG1))
+	(call file_search_var (ARG1))
 	(allow ARG1 var_spool.var_spool_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 var_spool.var_spool_file file_var_spool_obj_type)))
 
 (macro file_list_all_var_spool ((type ARG1))
+	(call file_search_var (ARG1))
 	(allow ARG1 var_spool.var_spool_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 var_spool.var_spool_file file_var_spool_obj_type)))
 
@@ -1141,7 +1175,7 @@
 	(allow ARG1 file_var_spool_obj_type manage_lnk_file_perms))
 
 (macro file_var_spool_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
-	(call file_search_var (ARG1))
+	(call file_search_var_spool (ARG1))
 	(call obj_type_transition_pattern (ARG1 var_spool.var_spool_file ARG2 ARG3 ARG4)))
 
 (macro file_search_var_tmp ((type ARG1))
@@ -1194,10 +1228,12 @@
 	(allow ARG1 var_tmp.var_tmp_file manage_lnk_file_perms))
 
 (macro file_search_all_var_tmp ((type ARG1))
+	(call file_search_var (ARG1))
 	(allow ARG1 var_tmp.var_tmp_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 var_tmp.var_tmp_file file_var_tmp_obj_type)))
 
 (macro file_list_all_var_tmp ((type ARG1))
+	(call file_search_var (ARG1))
 	(allow ARG1 var_tmp.var_tmp_file read_lnk_file_perms)
 	(call search_dirs_pattern (ARG1 var_tmp.var_tmp_file file_var_tmp_obj_type)))
 
@@ -1226,7 +1262,7 @@
 	(allow ARG1 file_var_tmp_obj_type manage_lnk_file_perms))
 
 (macro file_var_tmp_obj_type_transition ((type ARG1)(type ARG2)(class ARG3)(name ARG4))
-	(call file_read_var_tmp_lnk_files (ARG1))
+	(call file_search_var_tmp (ARG1))
 	(call obj_type_transition_pattern (ARG1 var_tmp.var_tmp_file ARG2 ARG3 ARG4)))
 
 (macro file_getattr_all ((type ARG1))
