@@ -11,9 +11,9 @@
 (typeattribute file_boot_obj_type)
 (typeattribute file_boot_flag_obj_type)
 (typeattribute file_config_obj_type)
-(typeattribute file_config_runtime_obj_type)
 (typeattribute file_data_obj_type)
 (typeattribute file_runtime_obj_type)
+(typeattribute file_runtime_config_obj_type)
 (typeattribute file_runtime_lock_obj_type)
 (typeattribute file_var_obj_type)
 (typeattribute file_var_cache_obj_type)
@@ -34,9 +34,6 @@
 	(blockinherit file_config_obj_blk)
 
 	(call sys_mountpoint_obj_type (config_file)))
-
-(block config_runtime
-	(blockinherit file_config_runtime_obj_blk))
 
 (block data
 	(blockinherit file_data_obj_blk)
@@ -60,6 +57,9 @@
 	(blockinherit file_runtime_obj_blk)
 
 	(call sys_mountpoint_obj_type (runtime_file)))
+
+(block runtime_config
+	(blockinherit file_runtime_config_obj_blk))
 
 (block runtime_lock
 	(blockinherit file_runtime_lock_obj_blk)

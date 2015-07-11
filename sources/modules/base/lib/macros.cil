@@ -26,10 +26,13 @@
 	(call read_lnk_files_pattern (ARG1 lib.lib_file lib.lib_file)))
 
 (macro lib_search_lib ((type ARG1))
-	(call lib_read_lib_lnk_files (ARG1)))
+	(call file_search_data (ARG1))
+	(allow ARG1 lib.lib_file read_file_perms)
+	(allow ARG1 lib.lib_file search_dir_perms))
 
 (macro lib_list_lib ((type ARG1))
-	(call lib_read_lib_lnk_files (ARG1))
+	(call file_search_data (ARG1))
+	(allow ARG1 lib.lib_file read_file_perms)
 	(allow ARG1 lib.lib_file list_dir_perms))
 
 (macro lib_rw_lib_dirs ((type ARG1))
