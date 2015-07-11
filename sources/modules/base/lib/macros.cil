@@ -27,12 +27,12 @@
 
 (macro lib_search_lib ((type ARG1))
 	(call file_search_data (ARG1))
-	(allow ARG1 lib.lib_file read_file_perms)
+	(allow ARG1 lib.lib_file read_lnk_file_perms)
 	(allow ARG1 lib.lib_file search_dir_perms))
 
 (macro lib_list_lib ((type ARG1))
 	(call file_search_data (ARG1))
-	(allow ARG1 lib.lib_file read_file_perms)
+	(allow ARG1 lib.lib_file read_lnk_file_perms)
 	(allow ARG1 lib.lib_file list_dir_perms))
 
 (macro lib_rw_lib_dirs ((type ARG1))
