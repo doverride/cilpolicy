@@ -11,7 +11,19 @@
 
 (typeattribute subj_unconfined_type)
 
+(typeattribute subj_interactive_fd_type)
+(typeattribute subj_use_interactive_fd_type)
+
 (typeattribute subj_obj_id_change_exemption_type)
+
+(typeattribute subj_sys_id_change_exemption_type)
+(typeattribute subj_sys_role_change_exemption_type)
+
+(typeattribute subj_id_change_exemption_type)
+(typeattribute subj_role_change_exemption_type)
+
+(typeattribute subj_user_exemption_target_type)
+
 (typeattribute subj_uncond_exempt_type)
 
 (block subj_execheap
@@ -29,9 +41,35 @@
 (block subj_ptrace
 	(blockinherit sec_bool_obj_blk))
 
+(call cmd_obj_type (subj_entry_obj_type))
+
+(allow subj_use_interactive_fd_type subj_interactive_fd_type (fd (use)))
+
+(allow subj_type self (process (sigkill signal signull sigstop)))
+
+(allow subj_type self rw_file_perms)
+(allow subj_type self list_dir_perms)
+(allow subj_type self read_lnk_file_perms)
+
 (call sys_subj_type (subj_common_type))
 
-(call cmd_exec_obj_type (subj_entry_obj_type))
+(call fs_search_rootfs (subj_type))
+
+(allow subj_common_type self (process (fork sigchld)))
+
+(call sys_read_vm_overcommit_sysctl_files (subj_common_type))
+
+(call cmd_search_cmd (subj_common_type))
+
+(call dev_rw_devtty (subj_common_type))
+(call dev_rw_null (subj_common_type))
+(call dev_rw_zero (subj_common_type))
+
+(call fs_read_proc (subj_common_type))
+
+(optional subj_common_type_optional_lib
+	(call lib_use_ld_so (subj_common_type))
+	(call lib_use_all_libs (subj_common_type)))
 
 (typeattribute subj_not_subj_entry_obj_type)
 

@@ -1,4 +1,5 @@
 (context console (sys.id sys.role console.dev (systemlow systemlow)))
+(context term_console_login (sys.id sys.role term_console_login.bool (systemlow systemlow)))
 (context tty (sys.id sys.role tty.serial_dev (systemlow systemlow)))
 (context virtio (sys.id sys.role virtio.serial_dev (systemlow systemlow)))
 
@@ -7,3 +8,4 @@
 (filecon "/dev/tty.+" char tty)
 (filecon "/dev/vcs[^/]*" char tty)
 (filecon "/dev/vport[0-9]p[0-9]+" char virtio)
+(genfscon "selinuxfs" "/booleans/term_console_login" term_console_login)
