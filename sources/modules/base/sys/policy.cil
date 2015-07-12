@@ -93,6 +93,8 @@
 	(allow isid self list_dir_perms)
 	(allow isid self read_lnk_file_perms)
 
+	(call sys_mountpoint_obj_type (isid))
+
 	(call fs_associate_fs (isid))
 	(call fs_associate_tmpfs (isid))
 	(call fs_search_proc (isid)))
