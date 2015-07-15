@@ -613,6 +613,9 @@
 (macro fs_list_all ((type ARG1))
 	(allow ARG1 fs_obj_type list_dir_perms))
 
+(macro fs_read_all_lnk_files ((type ARG1))
+	(call read_lnk_files_pattern (ARG1 fs_obj_type fs_obj_type)))
+
 (macro fs_dontaudit_getattr_all_fs ((type ARG1))
 	(dontaudit ARG1 fs_obj_type (filesystem (getattr))))
 
