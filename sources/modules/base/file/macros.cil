@@ -624,7 +624,7 @@
 	(allow ARG1 file_runtime_config_obj_type manage_lnk_file_perms)
 	(allow ARG1 file_runtime_config_obj_type manage_sock_file_perms))
 
-(macro file_runtime_config_obj_type_transition_runtime_config ((type ARG1))
+(macro file_runtime_obj_type_transition_runtime_config ((type ARG1))
 	(call file_search_runtime (ARG1))
 	(call file_runtime_obj_type_transition (ARG1 runtime_config.runtime_config_file dir "sysconfig")))
 
