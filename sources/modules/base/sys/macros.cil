@@ -158,6 +158,10 @@
 (macro sys_unix_dgram_sendto ((type ARG1))
 	(allow ARG1 sys.subj (unix_dgram_socket (sendto))))
 
+(macro sys_rw_inherited_unix_stream_sockets ((type ARG1))
+	(call sys_use_fd (ARG1))
+	(allow ARG1 sys.subj (unix_stream_socket (getattr ioctl read write))))
+
 (macro sys_rw_unix_stream_sockets ((type ARG1))
 	(allow ARG1 sys.subj rw_unix_stream_socket_perms))
 
