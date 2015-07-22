@@ -1,1 +1,6 @@
 (tunable enable_rbacsep false)
+
+(roleattribute rbacsep_exempt_role)
+
+(typeattribute rbacsep_exempt_obj_type)
+(typeattribute rbacsep_exempt_subj_type)

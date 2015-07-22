@@ -31,6 +31,8 @@
 	(user id)
 	(role role)
 
+	(call rbacsep_exempt_role (role))
+
 	(blockinherit subj_common_blk)
 
 	(context sys (id role subj (systemhigh systemhigh)))
