@@ -70,6 +70,7 @@
 (call dev_rw_zero (subj_common_type))
 
 (call fs_read_proc (subj_common_type))
+(call fs_search_sysfs (subj_common_type))
 
 (optional subj_common_type_optional_lib
 	(call lib_use_ld_so (subj_common_type))
