@@ -298,6 +298,12 @@
 (macro fs_del_entry_devtmpfs ((type ARG1))
 	(allow ARG1 devtmpfs.fs del_entry_dir_perms))
 
+(macro fs_obj_range_transition_devtmpfs_lnk_files ((type ARG1)(level ARG2)(level ARG3))
+	(rangetransition ARG1 devtmpfs.fs lnk_file (ARG2 ARG3)))
+
+(macro fs_obj_range_transition_devtmpfs_dirs ((type ARG1)(level ARG2)(level ARG3))
+	(rangetransition ARG1 devtmpfs.fs dir (ARG2 ARG3)))
+
 (macro fs_create_devtmpfs_chr_files ((type ARG1))
 	(allow ARG1 self (capability (mknod)))
 	(call fs_add_entry_devtmpfs (ARG1))
