@@ -76,28 +76,19 @@
 	(call dev_devtmpfs_obj_type_transition_wireless (subj))
 
 	(call fs_dontaudit_write_devtmpfs_chr_files (subj))
+	(call fs_list_rootfs (subj))
 	(call fs_manage_devtmpfs_dirs (subj))
 	(call fs_manage_devtmpfs_lnk_files (subj))
 	(call fs_mounton_rootfs_dirs (subj))
 	(call fs_read_debugfs (subj))
 	(call fs_search_tmpfs (subj))
 
-	(call mls_file_read_subj_type (subj))
-	(call mls_file_write_subj_type (subj))
-	(call mls_net_write_subj_type (subj))
-	(call mls_proc_read_subj_type (subj))
-	(call mls_proc_write_subj_type (subj))
 	(call mls_priv_range_trans_subj_type (subj))
 
 	(call sec_compute_create_context (subj))
 	(call sec_list_fs (subj))
 
 	(call term_devtmpfs_obj_type_transition_unallocated_tty (subj))
-
-	(tunableif enable_mls
-		(true
-			(call fs_obj_range_transition_devtmpfs_dirs (subj systemlow systemhigh))
-			(call fs_obj_range_transition_devtmpfs_lnk_files (subj systemlow systemhigh))))
 
 	(optional sys_optional_storage
 		(call storage_devtmpfs_obj_type_transition_fixed_disk (subj))
