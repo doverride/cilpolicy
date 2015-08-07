@@ -1,4 +1,4 @@
-(tunable enable_rbacsep true)
+(tunable enable_rbacsep false)
 
 (roleattribute rbacsep_exempt_role)
 
