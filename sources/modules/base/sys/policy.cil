@@ -105,7 +105,11 @@
 
 	(call fs_associate_fs (isid))
 	(call fs_associate_tmpfs (isid))
-	(call fs_search_proc (isid)))
+	(call fs_search_proc (isid))
+
+	(tunableif enable_rbacsep
+		(false
+			(roletype object_r isid))))
 
 (block unlabeled
 	(blockinherit sys_isid_blk)
