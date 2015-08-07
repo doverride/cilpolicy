@@ -8,17 +8,25 @@
 		(context removable_storage (sys.id object_r removable_storage.storage_dev (systemlow systemlow)))
 		(context scsi_generic (sys.id object_r scsi_generic.storage_dev (systemlow systemlow)))))
 
-(tunableif (and (enable_mls) (enable_rbacsep))
+(tunableif enable_mls
 	(true
-		(context fixed_disk (sys.id sys.role fixed_disk.storage_dev (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context fixed_disk (sys.id sys.role fixed_disk.storage_dev (systemhigh systemhigh))))))
 	(false
-		(context fixed_disk (sys.id sys.role fixed_disk.storage_dev (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context fixed_disk (sys.id object_r fixed_disk.storage_dev (systemhigh systemhigh)))))))
 
-(tunableif (and (enable_mls) (not enable_rbacsep))
+(tunableif (not enable_mls)
 	(true
-		(context fixed_disk (sys.id object_r fixed_disk.storage_dev (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context fixed_disk (sys.id sys.role fixed_disk.storage_dev (systemlow systemlow))))))
 	(false
-		(context fixed_disk (sys.id object_r fixed_disk.storage_dev (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context fixed_disk (sys.id object_r fixed_disk.storage_dev (systemlow systemlow)))))))
 
 (filecon "/dev/bsg/.+" char scsi_generic)
 (filecon "/dev/dm-[0-9]+" block fixed_disk)

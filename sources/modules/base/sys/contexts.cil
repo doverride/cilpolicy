@@ -46,29 +46,37 @@
 		(context vm_overcommit (sys.id object_r vm_overcommit.sysctl (systemlow systemlow)))
 		(context vm (sys.id object_r vm.sysctl (systemlow systemlow)))))
 
-(tunableif (and (enable_mls) (enable_rbacsep))
+(tunableif enable_mls
 	(true
-		(context invalid (sys.id sys.role invalid.isid (systemhigh systemhigh)))
-		(context kcore (sys.id sys.role kcore.proc (systemhigh systemhigh)))
-		(context kmsg_proc (sys.id sys.role kmsg_proc.proc (systemhigh systemhigh)))
-		(context sys (sys.id sys.role sys.subj (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context invalid (sys.id sys.role invalid.isid (systemhigh systemhigh)))
+				(context kcore (sys.id sys.role kcore.proc (systemhigh systemhigh)))
+				(context kmsg_proc (sys.id sys.role kmsg_proc.proc (systemhigh systemhigh)))
+				(context sys (sys.id sys.role sys.subj (systemhigh systemhigh))))))
 	(false
-		(context invalid (sys.id sys.role invalid.isid (systemlow systemlow)))
-		(context kcore (sys.id sys.role kcore.proc (systemlow systemlow)))
-		(context kmsg_proc (sys.id sys.role kmsg_proc.proc (systemlow systemlow)))
-		(context sys (sys.id sys.role sys.subj (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context invalid (sys.id object_r invalid.isid (systemhigh systemhigh)))
+				(context kcore (sys.id object_r kcore.proc (systemhigh systemhigh)))
+				(context kmsg_proc (sys.id object_r kmsg_proc.proc (systemhigh systemhigh)))
+				(context sys (sys.id object_r sys.subj (systemhigh systemhigh)))))))
 
-(tunableif (and (enable_mls) (not enable_rbacsep))
+(tunableif (not enable_mls)
 	(true
-		(context invalid (sys.id object_r invalid.isid (systemhigh systemhigh)))
-		(context kcore (sys.id object_r kcore.proc (systemhigh systemhigh)))
-		(context kmsg_proc (sys.id object_r kmsg_proc.proc (systemhigh systemhigh)))
-		(context sys (sys.id object_r sys.subj (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context invalid (sys.id sys.role invalid.isid (systemlow systemlow)))
+				(context kcore (sys.id sys.role kcore.proc (systemlow systemlow)))
+				(context kmsg_proc (sys.id sys.role kmsg_proc.proc (systemlow systemlow)))
+				(context sys (sys.id sys.role sys.subj (systemlow systemlow))))))
 	(false
-		(context invalid (sys.id object_r invalid.isid (systemlow systemlow)))
-		(context kcore (sys.id object_r kcore.proc (systemlow systemlow)))
-		(context kmsg_proc (sys.id object_r kmsg_proc.proc (systemlow systemlow)))
-		(context sys (sys.id object_r sys.subj (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context invalid (sys.id object_r invalid.isid (systemlow systemlow)))
+				(context kcore (sys.id object_r kcore.proc (systemlow systemlow)))
+				(context kmsg_proc (sys.id object_r kmsg_proc.proc (systemlow systemlow)))
+				(context sys (sys.id object_r sys.subj (systemlow systemlow)))))))
 
 (filecon "/var/log/boot\.log" file sys_var_log_file)
 

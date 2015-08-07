@@ -6,17 +6,25 @@
 		(context securityfs (sys.id object_r securityfs.fs (systemlow systemlow)))
 		(context sec_load_policy (sys.id object_r sec_load_policy.bool (systemlow systemlow)))))
 
-(tunableif (and (enable_mls) (enable_rbacsep))
+(tunableif enable_mls
 	(true
-		(context security_sidcon (sys.id sys.role securityfs.fs (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context security_sidcon (sys.id sys.role securityfs.fs (systemhigh systemhigh))))))
 	(false
-		(context security_sidcon (sys.id sys.role securityfs.fs (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context security_sidcon (sys.id object_r securityfs.fs (systemhigh systemhigh)))))))
 
-(tunableif (and (enable_mls) (not enable_rbacsep))
+(tunableif (not enable_mls)
 	(true
-		(context security_sidcon (sys.id object_r securityfs.fs (systemhigh systemhigh))))
+		(tunableif enable_rbacsep
+			(true
+				(context security_sidcon (sys.id sys.role securityfs.fs (systemlow systemlow))))))
 	(false
-		(context security_sidcon (sys.id object_r securityfs.fs (systemlow systemlow)))))
+		(tunableif (not enable_rbacsep)
+			(true
+				(context security_sidcon (sys.id object_r securityfs.fs (systemlow systemlow)))))))
 
 (genfscon "securityfs" "/" securityfs)
 (genfscon "selinuxfs" "/booleans/sec_load_policy" sec_load_policy)
