@@ -158,12 +158,12 @@
 (macro sys_unix_dgram_sendto ((type ARG1))
 	(allow ARG1 sys.subj (unix_dgram_socket (sendto))))
 
+(macro sys_rw_unix_stream_sockets ((type ARG1))
+	(allow ARG1 sys.subj rw_unix_stream_socket_perms))
+
 (macro sys_rw_inherited_unix_stream_sockets ((type ARG1))
 	(call sys_use_fd (ARG1))
 	(allow ARG1 sys.subj rw_inherited_unix_stream_socket_perms))
-
-(macro sys_rw_unix_stream_sockets ((type ARG1))
-	(allow ARG1 sys.subj rw_unix_stream_socket_perms))
 
 (macro sys_unix_stream_connectto ((type ARG1))
 	(allow ARG1 sys.subj (unix_stream_socket (connectto))))
@@ -399,6 +399,10 @@
 	(call sys_rw_usermodehelper_sysctl_files (ARG1))
 	(call sys_rw_vm_sysctl_files (ARG1))
 	(call sys_rw_vm_overcommit_sysctl_files (ARG1)))
+
+(macro sys_read_iomem_proc_files ((type ARG1))
+	(call fs_search_proc (ARG1))
+	(allow ARG1 iomem.proc read_file_perms))
 
 (macro sys_read_kallsyms_proc_files ((type ARG1))
 	(call fs_search_proc (ARG1))

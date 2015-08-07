@@ -20,7 +20,7 @@
 	(typeattributeset fs_read_fuse_subj_type ARG1))
 
 (macro fs_manage_fuse_subj_type ((type ARG1))
-       (typeattributeset fs_manage_fuse_subj_type ARG1))
+	(typeattributeset fs_manage_fuse_subj_type ARG1))
 
 (macro fs_read_iso9660_subj_type ((type ARG1))
 	(typeattributeset fs_read_iso9660_subj_type ARG1))
@@ -277,9 +277,6 @@
 	(allow ARG1 devtmpfs.fs list_dir_perms)
 	(allow ARG1 devtmpfs.fs read_lnk_file_perms))
 
-(macro fs_manage_devtmpfs_dirs ((type ARG1))
-	(call manage_dirs_pattern (ARG1 devtmpfs.fs devtmpfs.fs)))
-
 (macro fs_audit_access_devtmpfs_dirs ((type ARG1))
 	(allow ARG1 devtmpfs.fs (dir (write))))
 
@@ -297,12 +294,6 @@
 
 (macro fs_del_entry_devtmpfs ((type ARG1))
 	(allow ARG1 devtmpfs.fs del_entry_dir_perms))
-
-(macro fs_obj_range_transition_devtmpfs_lnk_files ((type ARG1)(level ARG2)(level ARG3))
-	(rangetransition ARG1 devtmpfs.fs lnk_file (ARG2 ARG3)))
-
-(macro fs_obj_range_transition_devtmpfs_dirs ((type ARG1)(level ARG2)(level ARG3))
-	(rangetransition ARG1 devtmpfs.fs dir (ARG2 ARG3)))
 
 (macro fs_create_devtmpfs_chr_files ((type ARG1))
 	(allow ARG1 self (capability (mknod)))
@@ -332,6 +323,9 @@
 
 (macro fs_manage_devtmpfs_blk_files ((type ARG1))
 	(call manage_blk_files_pattern (ARG1 devtmpfs.fs devtmpfs.fs)))
+
+(macro fs_manage_devtmpfs_dirs ((type ARG1))
+	(call manage_dirs_pattern (ARG1 devtmpfs.fs devtmpfs.fs)))
 
 (macro fs_manage_devtmpfs_lnk_files ((type ARG1))
 	(call manage_lnk_files_pattern (ARG1 devtmpfs.fs devtmpfs.fs)))

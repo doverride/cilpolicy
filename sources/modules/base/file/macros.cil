@@ -1378,12 +1378,15 @@
 (macro file_list_all ((type ARG1))
 	(allow ARG1 file_obj_type list_dir_perms))
 
+(macro file_read_all_lnk_files ((type ARG1))
+	(call read_lnk_files_pattern (ARG1 file_obj_type file_obj_type)))
+
 (macro file_dontaudit_relabel_all ((type ARG1))
 	(dontaudit ARG1 file_obj_type (file (relabelto relabelfrom)))
 	(dontaudit ARG1 file_obj_type (dir (relabelto relabelfrom)))
 	(dontaudit ARG1 file_obj_type (fifo_file (relabelto relabelfrom)))
 	(dontaudit ARG1 file_obj_type (lnk_file (relabelto relabelfrom)))
- 	(dontaudit ARG1 file_obj_type (sock_file (relabelto relabelfrom)))
+	(dontaudit ARG1 file_obj_type (sock_file (relabelto relabelfrom)))
 	(dontaudit ARG1 file_obj_type (blk_file (relabelto relabelfrom)))
 	(dontaudit ARG1 file_obj_type (chr_file (relabelto relabelfrom))))
 
@@ -1395,9 +1398,6 @@
 	(allow ARG1 file_obj_type (sock_file (getattr)))
 	(allow ARG1 file_obj_type (blk_file (getattr)))
 	(allow ARG1 file_obj_type (chr_file (getattr))))
-
-(macro file_read_all_lnk_files ((type ARG1))
-	(call read_lnk_files_pattern (ARG1 file_obj_type file_obj_type)))
 
 (macro file_read_all_files_except ((type ARG1))
 	(call read_files_pattern (ARG1 file_except_obj_type file_except_obj_type)))
